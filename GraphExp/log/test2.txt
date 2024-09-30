@@ -1,0 +1,78 @@
+import numpy as np
+import os
+import torch
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+import matplotlib.pyplot as plt
+
+def graph_classification_evaluation(model, T, pooler, dataloader, device, logger, epoch, save_tsne=False):
+    model.eval()
+    embed_list = []v
+    head_list = []
+    optim_list = []
+    y_list = []
+
+    with torch.no_grad():
+        for t in T:
+            x_list = []
+            for i, (batch_g_fmri, batch_g_dti, labels) in enumerate(dataloader):
+                batch_g_fmri = batch_g_fmri.to(device)
+                batch_g_dti = batch_g_dti.to(device)
+
+                feat_fmri = batch_g_fmri.ndata["attr"]
+                feat_dti = batch_g_dti.ndata["attr"]
+                community_fmri = batch_g_fmri.ndata["community"]
+                community_dti = batch_g_dti.ndata["community"]
+
+                out, finally_batch_g_eval = model.embed(batch_g_fmri, batch_g_dti, feat_fmri, feat_dti, t, community_fmri, community_dti)
+                out = pooler(finally_batch_g_eval, out)
+
+                x_list.append(out)
+                y_list.append(labels)
+
+            head_list.append(1)
+            embed_list.append(torch.cat(x_list, dim=0).cpu().numpy())
+
+        y_list = torch.cat(y_list, dim=0)
+
+    embed_list = np.stack(embed_list, axis=1)  # (250, 2, 1024)
+    embed_list = np.reshape(embed_list, (embed_list.shape[0], -1))  # (250, 2048)
+    y_list = y_list.cpu().numpy()
+
+    # 打印大小
+    print(f"embed_list shape: {embed_list.shape}")
+    print(f"y_list shape: {y_list.shape}")
+
+    # 使用 PCA 降维
+    pca = PCA(n_components=100)
+    reduced_embed_list = pca.fit_transform(embed_list)
+    print(f"reduced_embed_list shape: {reduced_embed_list.shape}")
+
+    # 使用 t-SNE 进行降维
+    if save_tsne:
+        tsne = TSNE(n_components=2, random_state=42)
+        tsne_results = tsne.fit_transform(reduced_embed_list)
+
+        # 可视化 t-SNE 结果
+        plt.figure(figsize=(8, 6))
+        scatter = plt.scatter(tsne_results[:, 0], tsne_results[:, 1], c=y_list, cmap='viridis', alpha=0.7)
+        plt.colorbar(scatter)
+        plt.title(f"t-SNE Visualization at Epoch {epoch}")
+        plt.savefig(f"tsne_visualization_epoch_{epoch}.png")
+        plt.show()
+
+        # 保存 t-SNE 数据
+        save_dir = 'tsne/ZDXX'
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+
+        tsne_data = {
+            'y': y_list,
+            'embedding': tsne_results
+        }
+        np.save(os.path.join(save_dir, f'tsne_epoch_{epoch}.npy'), tsne_data)
+
+    test_f1, test_std = evaluate_graph_embeddings_using_svm(reduced_embed_list, y_list)
+    logger.info(f"#Test_f1: {test_f1:.4f}±{test_std:.4f}")
+
+    return test_f1

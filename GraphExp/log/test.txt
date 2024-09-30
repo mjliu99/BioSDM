@@ -1,0 +1,5704 @@
+/root/miniconda3/envs/myconda/bin/python /DDMnew/GraphExp/main_graph.py
+WARNING:root:The OGB package is out of date. Your version is 1.3.5, while the latest version is 1.3.6.
+True
+NVIDIA A16
+DGL version: 0.9.1post1
+{'DATA': {'data_name': 'MUTAG', 'deg4feat': True}, 'DATALOADER': {'NUM_WORKERS': 0, 'BATCH_SIZE': 32}, 'MODEL': {'num_hidden': 512, 'num_layers': 2, 'nhead': 4, 'activation': 'prelu', 'attn_drop': 0.1, 'feat_drop': 0.2, 'norm': 'layernorm', 'pooler': 'mean', 'beta_schedule': 'sigmoid', 'beta_1': 0.000335, 'beta_T': 0.03379, 'T': 728}, 'SOLVER': {'optim_type': 'adamw', 'optim_type_f': 'adamw', 'alpha': 1, 'decay': 30, 'LR': 0.000292, 'weight_decay': 0.0005, 'MAX_EPOCH': 100}, 'DEVICE': 'cuda', 'seeds': [11], 'eval_T': [50, 100, 200], 'output_dir': '/DDMnew/GraphExp/log', 'checkpoint_dir': '/DDMnew/GraphExp/log/checkpoint'}
+[08/13 08:40:59 graph]: Rank of current process: 0. World size: 1
+[08/13 08:41:00 graph]: Environment info:
+PyTorch version: 1.11.0+cu113
+Is debug build: False
+CUDA used to build PyTorch: 11.3
+ROCM used to build PyTorch: N/A
+
+OS: Ubuntu 18.04.6 LTS (x86_64)
+GCC version: (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+Clang version: Could not collect
+CMake version: version 3.10.2
+Libc version: glibc-2.27
+
+Python version: 3.8.12 (default, Oct 12 2021, 13:49:34)  [GCC 7.5.0] (64-bit runtime)
+Python platform: Linux-4.19.0-19-amd64-x86_64-with-glibc2.17
+Is CUDA available: True
+CUDA runtime version: Could not collect
+GPU models and configuration: GPU 0: NVIDIA A16
+Nvidia driver version: 510.54
+cuDNN version: Probably one of the following:
+/usr/lib/x86_64-linux-gnu/libcudnn.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_infer.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_train.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_infer.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_train.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_infer.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_train.so.8.2.0
+HIP runtime version: N/A
+MIOpen runtime version: N/A
+
+        # # 对 fMRI 特征进行标准化
+        # scaler_fmri = MinMaxScaler(feature_range=(0, 1))  # 设置范围为 [0, 1]
+        # x_attr_fmri = np.concatenate([g.ndata['attr'].numpy() for g in graphs_fmri], axis=0)
+        # scaler_fmri.fit(x_attr_fmri)
+        #
+        # # 对 DTI 特征进行标准化
+        # scaler_dti = MinMaxScaler(feature_range=(0, 1))  # 设置范围为 [0, 1]
+        # x_attr_dti = np.concatenate([g.ndata['attr'].numpy() for g in graphs_dti], axis=0)
+        # scaler_dti.fit(x_attr_dti)
+        #
+        # # 将标准化后的特征应用到每个图
+        # for g_fmri, g_dti, _ in dataset:
+        #     g_fmri.ndata['attr'] = torch.tensor(scaler_fmri.transform(g_fmri.ndata['attr'].numpy()),
+        #                                         dtype=torch.float32)
+        #     g_dti.ndata['attr'] = torch.tensor(scaler_dti.transform(g_dti.ndata['attr'].numpy()), dtype=torch.float32)
+
+
+
+
+                    # # 对 fMRI 进行社区检测和处理
+            # adjacency_matrix_fmri = self.get_adjacency_matrix(g_fmri_sub)
+            # # node_features_fmri = g_fmri_sub.ndata['attr'].cpu().numpy()
+            # # print(type(node_features_fmri))
+            # print(f"FMRI detect_communities")
+            # partition_fmri, G_fmri = self.detect_communities(adjacency_matrix_fmri, t)
+            # noisy_features_fmri, g_fmri_sub_noisy = self.process_by_community(adjacency_matrix_fmri, partition_fmri,
+            #                                                                   x_t_fmri_sub, g_fmri_sub,t)
+            # x_t_fmri_sub = noisy_features_fmri
+            # g_fmri_sub = g_fmri_sub_noisy
+            #
+            # # 对 DTI 进行社区检测和处理
+            # adjacency_matrix_dti = self.get_adjacency_matrix(g_dti_sub)
+            # # node_features_dti = g_dti_sub.ndata['attr'].cpu().numpy()
+            # print(f"DTI detect_communities")
+            # partition_dti, G_dti = self.detect_communities(adjacency_matrix_dti, t)
+            # noisy_features_dti, g_dti_sub_noisy = self.process_by_community(adjacency_matrix_dti, partition_dti,
+            #                                                                 x_t_dti_sub, g_dti_sub,t)
+            # x_t_dti_sub = noisy_features_dti
+            # g_dti_sub = g_dti_sub_noisy
+Versions of relevant libraries:
+[pip3] numpy==1.22.3
+[pip3] torch==1.11.0+cu113
+[pip3] torchaudio==0.11.0+cu113
+[pip3] torchvision==0.12.0+cu113
+[conda] Could not collect
+        Pillow (9.0.1)
+[08/13 08:41:00 graph]: Command line arguments: Namespace(checkpoint_dir=None, local_rank=0, output_dir=None, resume=False, seed=1234, start_epoch=0, yaml_dir=None)
+Using degree as node features
+******** # Num Graphs: 188, # Num Feat: 5, # Num Classes: 2 ********
+[08/13 08:41:01 graph]: Run 0th for seed 11
+[08/13 08:41:01 graph]: Total trainable params num : 5113967
+[08/13 08:41:05 graph]: ----------Start Training----------
+[08/13 08:41:06 graph]: Epoch 0 | train_loss: 0.7322 | lr: 0.000292
+[08/13 08:41:06 graph]: Epoch 1 | train_loss: 0.4194 | lr: 0.000292
+[08/13 08:41:06 graph]: Epoch 2 | train_loss: 0.3422 | lr: 0.000292
+[08/13 08:41:10 graph]: #Test_f1: 0.8781±0.0621
+[08/13 08:41:10 graph]: Epoch 2: get test f1 score:  0.878
+[08/13 08:41:10 graph]: best_f1 0.878 at epoch 2
+[08/13 08:41:10 graph]: Epoch 3 | train_loss: 0.3014 | lr: 0.000292
+[08/13 08:41:13 graph]: #Test_f1: 0.8515±0.0564
+[08/13 08:41:13 graph]: Epoch 3: get test f1 score:  0.851
+[08/13 08:41:13 graph]: best_f1 0.878 at epoch 2
+[08/13 08:41:14 graph]: Epoch 4 | train_loss: 0.2786 | lr: 0.000292
+[08/13 08:41:17 graph]: #Test_f1: 0.8570±0.0520
+[08/13 08:41:17 graph]: Epoch 4: get test f1 score:  0.857
+[08/13 08:41:17 graph]: best_f1 0.878 at epoch 2
+[08/13 08:41:17 graph]: Epoch 5 | train_loss: 0.2618 | lr: 0.000292
+[08/13 08:41:20 graph]: #Test_f1: 0.8515±0.0513
+[08/13 08:41:20 graph]: Epoch 5: get test f1 score:  0.851
+[08/13 08:41:20 graph]: best_f1 0.878 at epoch 2
+[08/13 08:41:21 graph]: Epoch 6 | train_loss: 0.2483 | lr: 0.000292
+[08/13 08:41:24 graph]: #Test_f1: 0.8936±0.0671
+[08/13 08:41:24 graph]: Epoch 6: get test f1 score:  0.894
+[08/13 08:41:24 graph]: best_f1 0.894 at epoch 6
+[08/13 08:41:24 graph]: Epoch 7 | train_loss: 0.2374 | lr: 0.000292
+[08/13 08:41:28 graph]: #Test_f1: 0.8827±0.0821
+[08/13 08:41:28 graph]: Epoch 7: get test f1 score:  0.883
+[08/13 08:41:28 graph]: best_f1 0.894 at epoch 6
+[08/13 08:41:28 graph]: Epoch 8 | train_loss: 0.2327 | lr: 0.000292
+[08/13 08:41:31 graph]: #Test_f1: 0.8827±0.0750
+[08/13 08:41:31 graph]: Epoch 8: get test f1 score:  0.883
+[08/13 08:41:31 graph]: best_f1 0.894 at epoch 6
+[08/13 08:41:32 graph]: Epoch 9 | train_loss: 0.2204 | lr: 0.000292
+[08/13 08:41:35 graph]: #Test_f1: 0.8722±0.0798
+[08/13 08:41:35 graph]: Epoch 9: get test f1 score:  0.872
+[08/13 08:41:35 graph]: best_f1 0.894 at epoch 6
+[08/13 08:41:35 graph]: Epoch 10 | train_loss: 0.2097 | lr: 0.000292
+[08/13 08:41:39 graph]: #Test_f1: 0.8880±0.0738
+[08/13 08:41:39 graph]: Epoch 10: get test f1 score:  0.888
+[08/13 08:41:39 graph]: best_f1 0.894 at epoch 6
+[08/13 08:41:39 graph]: Epoch 11 | train_loss: 0.2051 | lr: 0.000292
+[08/13 08:41:42 graph]: #Test_f1: 0.8988±0.0649
+[08/13 08:41:42 graph]: Epoch 11: get test f1 score:  0.899
+[08/13 08:41:42 graph]: best_f1 0.899 at epoch 11
+[08/13 08:41:43 graph]: Epoch 12 | train_loss: 0.2072 | lr: 0.000292
+[08/13 08:41:46 graph]: #Test_f1: 0.8936±0.0671
+[08/13 08:41:46 graph]: Epoch 12: get test f1 score:  0.894
+[08/13 08:41:46 graph]: best_f1 0.899 at epoch 11
+[08/13 08:41:46 graph]: Epoch 13 | train_loss: 0.1956 | lr: 0.000292
+[08/13 08:41:50 graph]: #Test_f1: 0.8880±0.0738
+[08/13 08:41:50 graph]: Epoch 13: get test f1 score:  0.888
+[08/13 08:41:50 graph]: best_f1 0.899 at epoch 11
+[08/13 08:41:50 graph]: Epoch 14 | train_loss: 0.1940 | lr: 0.000292
+[08/13 08:41:53 graph]: #Test_f1: 0.8988±0.0605
+[08/13 08:41:53 graph]: Epoch 14: get test f1 score:  0.899
+[08/13 08:41:53 graph]: best_f1 0.899 at epoch 14
+[08/13 08:41:54 graph]: Epoch 15 | train_loss: 0.1908 | lr: 0.000292
+[08/13 08:41:57 graph]: #Test_f1: 0.8933±0.0536
+[08/13 08:41:57 graph]: Epoch 15: get test f1 score:  0.893
+[08/13 08:41:57 graph]: best_f1 0.899 at epoch 14
+[08/13 08:41:57 graph]: Epoch 16 | train_loss: 0.1793 | lr: 0.000292
+[08/13 08:42:00 graph]: #Test_f1: 0.8936±0.0582
+[08/13 08:42:00 graph]: Epoch 16: get test f1 score:  0.894
+[08/13 08:42:00 graph]: best_f1 0.899 at epoch 14
+[08/13 08:42:01 graph]: Epoch 17 | train_loss: 0.1716 | lr: 0.000292
+[08/13 08:42:03 graph]: #Test_f1: 0.8936±0.0582
+[08/13 08:42:03 graph]: Epoch 17: get test f1 score:  0.894
+[08/13 08:42:03 graph]: best_f1 0.899 at epoch 14
+[08/13 08:42:04 graph]: Epoch 18 | train_loss: 0.1814 | lr: 0.000292
+[08/13 08:42:07 graph]: #Test_f1: 0.9041±0.0575
+[08/13 08:42:07 graph]: Epoch 18: get test f1 score:  0.904
+[08/13 08:42:07 graph]: best_f1 0.904 at epoch 18
+[08/13 08:42:07 graph]: Epoch 19 | train_loss: 0.1686 | lr: 0.000292
+[08/13 08:42:11 graph]: #Test_f1: 0.8936±0.0533
+[08/13 08:42:11 graph]: Epoch 19: get test f1 score:  0.894
+[08/13 08:42:11 graph]: best_f1 0.904 at epoch 18
+[08/13 08:42:11 graph]: Epoch 20 | train_loss: 0.1790 | lr: 0.000292
+[08/13 08:42:14 graph]: #Test_f1: 0.8883±0.0502
+[08/13 08:42:14 graph]: Epoch 20: get test f1 score:  0.888
+[08/13 08:42:14 graph]: best_f1 0.904 at epoch 18
+[08/13 08:42:15 graph]: Epoch 21 | train_loss: 0.1730 | lr: 0.000292
+[08/13 08:42:18 graph]: #Test_f1: 0.8825±0.0586
+[08/13 08:42:18 graph]: Epoch 21: get test f1 score:  0.882
+[08/13 08:42:18 graph]: best_f1 0.904 at epoch 18
+[08/13 08:42:18 graph]: Epoch 22 | train_loss: 0.1651 | lr: 0.000292
+[08/13 08:42:22 graph]: #Test_f1: 0.8877±0.0514
+[08/13 08:42:22 graph]: Epoch 22: get test f1 score:  0.888
+[08/13 08:42:22 graph]: best_f1 0.904 at epoch 18
+[08/13 08:42:22 graph]: Epoch 23 | train_loss: 0.1701 | lr: 0.000292
+[08/13 08:42:25 graph]: #Test_f1: 0.8822±0.0594
+[08/13 08:42:25 graph]: Epoch 23: get test f1 score:  0.882
+[08/13 08:42:25 graph]: best_f1 0.904 at epoch 18
+[08/13 08:42:25 graph]: Epoch 24 | train_loss: 0.1630 | lr: 0.000292
+[08/13 08:42:29 graph]: #Test_f1: 0.8883±0.0436
+[08/13 08:42:29 graph]: Epoch 24: get test f1 score:  0.888
+[08/13 08:42:29 graph]: best_f1 0.904 at epoch 18
+[08/13 08:42:29 graph]: Epoch 25 | train_loss: 0.1627 | lr: 0.000292
+[08/13 08:42:32 graph]: #Test_f1: 0.8883±0.0688
+[08/13 08:42:32 graph]: Epoch 25: get test f1 score:  0.888
+[08/13 08:42:32 graph]: best_f1 0.904 at epoch 18
+[08/13 08:42:33 graph]: Epoch 26 | train_loss: 0.1621 | lr: 0.000292
+[08/13 08:42:36 graph]: #Test_f1: 0.8883±0.0602
+[08/13 08:42:36 graph]: Epoch 26: get test f1 score:  0.888
+[08/13 08:42:36 graph]: best_f1 0.904 at epoch 18
+[08/13 08:42:36 graph]: Epoch 27 | train_loss: 0.1604 | lr: 0.000292
+[08/13 08:42:39 graph]: #Test_f1: 0.8936±0.0749
+[08/13 08:42:39 graph]: Epoch 27: get test f1 score:  0.894
+[08/13 08:42:39 graph]: best_f1 0.904 at epoch 18
+[08/13 08:42:40 graph]: Epoch 28 | train_loss: 0.1629 | lr: 0.000292
+[08/13 08:42:43 graph]: #Test_f1: 0.8936±0.0533
+[08/13 08:42:43 graph]: Epoch 28: get test f1 score:  0.894
+[08/13 08:42:43 graph]: best_f1 0.904 at epoch 18
+[08/13 08:42:43 graph]: Epoch 29 | train_loss: 0.1654 | lr: 0.000292
+[08/13 08:42:46 graph]: #Test_f1: 0.8778±0.0710
+[08/13 08:42:46 graph]: Epoch 29: get test f1 score:  0.878
+[08/13 08:42:46 graph]: best_f1 0.904 at epoch 18
+[08/13 08:42:47 graph]: Epoch 30 | train_loss: 0.1620 | lr: 0.000292
+[08/13 08:42:53 graph]: #Test_f1: 0.8778±0.0670
+[08/13 08:42:53 graph]: Epoch 30: get test f1 score:  0.878
+[08/13 08:42:53 graph]: best_f1 0.904 at epoch 18
+[08/13 08:42:53 graph]: Epoch 31 | train_loss: 0.1647 | lr: 0.000292
+[08/13 08:42:56 graph]: #Test_f1: 0.8830±0.0617
+[08/13 08:42:56 graph]: Epoch 31: get test f1 score:  0.883
+[08/13 08:42:56 graph]: best_f1 0.904 at epoch 18
+[08/13 08:42:56 graph]: Epoch 32 | train_loss: 0.1562 | lr: 0.000292
+[08/13 08:43:00 graph]: #Test_f1: 0.8936±0.0671
+[08/13 08:43:00 graph]: Epoch 32: get test f1 score:  0.894
+[08/13 08:43:00 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:00 graph]: Epoch 33 | train_loss: 0.1509 | lr: 0.000292
+[08/13 08:43:03 graph]: #Test_f1: 0.8673±0.0716
+[08/13 08:43:03 graph]: Epoch 33: get test f1 score:  0.867
+[08/13 08:43:03 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:03 graph]: Epoch 34 | train_loss: 0.1536 | lr: 0.000292
+[08/13 08:43:06 graph]: #Test_f1: 0.8778±0.0582
+[08/13 08:43:06 graph]: Epoch 34: get test f1 score:  0.878
+[08/13 08:43:06 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:07 graph]: Epoch 35 | train_loss: 0.1607 | lr: 0.000292
+[08/13 08:43:10 graph]: #Test_f1: 0.8883±0.0444
+[08/13 08:43:10 graph]: Epoch 35: get test f1 score:  0.888
+[08/13 08:43:10 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:10 graph]: Epoch 36 | train_loss: 0.1489 | lr: 0.000292
+[08/13 08:43:13 graph]: #Test_f1: 0.8778±0.0710
+[08/13 08:43:13 graph]: Epoch 36: get test f1 score:  0.878
+[08/13 08:43:13 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:13 graph]: Epoch 37 | train_loss: 0.1463 | lr: 0.000292
+[08/13 08:43:16 graph]: #Test_f1: 0.8830±0.0776
+[08/13 08:43:16 graph]: Epoch 37: get test f1 score:  0.883
+[08/13 08:43:16 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:17 graph]: Epoch 38 | train_loss: 0.1445 | lr: 0.000292
+[08/13 08:43:20 graph]: #Test_f1: 0.8936±0.0671
+[08/13 08:43:20 graph]: Epoch 38: get test f1 score:  0.894
+[08/13 08:43:20 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:20 graph]: Epoch 39 | train_loss: 0.1432 | lr: 0.000292
+[08/13 08:43:23 graph]: #Test_f1: 0.8722±0.0645
+[08/13 08:43:23 graph]: Epoch 39: get test f1 score:  0.872
+[08/13 08:43:23 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:23 graph]: Epoch 40 | train_loss: 0.1441 | lr: 0.000292
+[08/13 08:43:26 graph]: #Test_f1: 0.8936±0.0671
+[08/13 08:43:26 graph]: Epoch 40: get test f1 score:  0.894
+[08/13 08:43:26 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:27 graph]: Epoch 41 | train_loss: 0.1472 | lr: 0.000292
+[08/13 08:43:30 graph]: #Test_f1: 0.8775±0.0594
+[08/13 08:43:30 graph]: Epoch 41: get test f1 score:  0.877
+[08/13 08:43:30 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:30 graph]: Epoch 42 | train_loss: 0.1442 | lr: 0.000292
+[08/13 08:43:33 graph]: #Test_f1: 0.8827±0.0712
+[08/13 08:43:33 graph]: Epoch 42: get test f1 score:  0.883
+[08/13 08:43:33 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:34 graph]: Epoch 43 | train_loss: 0.1414 | lr: 0.000292
+[08/13 08:43:37 graph]: #Test_f1: 0.8830±0.0740
+[08/13 08:43:37 graph]: Epoch 43: get test f1 score:  0.883
+[08/13 08:43:37 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:37 graph]: Epoch 44 | train_loss: 0.1345 | lr: 0.000292
+[08/13 08:43:40 graph]: #Test_f1: 0.8670±0.0687
+[08/13 08:43:40 graph]: Epoch 44: get test f1 score:  0.867
+[08/13 08:43:40 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:40 graph]: Epoch 45 | train_loss: 0.1326 | lr: 0.000292
+[08/13 08:43:44 graph]: #Test_f1: 0.8827±0.0584
+[08/13 08:43:44 graph]: Epoch 45: get test f1 score:  0.883
+[08/13 08:43:44 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:44 graph]: Epoch 46 | train_loss: 0.1359 | lr: 0.000292
+[08/13 08:43:47 graph]: #Test_f1: 0.8772±0.0760
+[08/13 08:43:47 graph]: Epoch 46: get test f1 score:  0.877
+[08/13 08:43:47 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:48 graph]: Epoch 47 | train_loss: 0.1349 | lr: 0.000292
+[08/13 08:43:51 graph]: #Test_f1: 0.8564±0.0717
+[08/13 08:43:51 graph]: Epoch 47: get test f1 score:  0.856
+[08/13 08:43:51 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:51 graph]: Epoch 48 | train_loss: 0.1363 | lr: 0.000292
+[08/13 08:43:54 graph]: #Test_f1: 0.8827±0.0672
+[08/13 08:43:54 graph]: Epoch 48: get test f1 score:  0.883
+[08/13 08:43:54 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:55 graph]: Epoch 49 | train_loss: 0.1317 | lr: 0.000292
+[08/13 08:43:58 graph]: #Test_f1: 0.8933±0.0722
+[08/13 08:43:58 graph]: Epoch 49: get test f1 score:  0.893
+[08/13 08:43:58 graph]: best_f1 0.904 at epoch 18
+[08/13 08:43:58 graph]: Epoch 50 | train_loss: 0.1329 | lr: 0.000292
+[08/13 08:44:01 graph]: #Test_f1: 0.8775±0.0639
+[08/13 08:44:01 graph]: Epoch 50: get test f1 score:  0.877
+[08/13 08:44:01 graph]: best_f1 0.904 at epoch 18
+[08/13 08:44:02 graph]: Epoch 51 | train_loss: 0.1428 | lr: 0.000292
+[08/13 08:44:05 graph]: #Test_f1: 0.8883±0.0727
+[08/13 08:44:05 graph]: Epoch 51: get test f1 score:  0.888
+[08/13 08:44:05 graph]: best_f1 0.904 at epoch 18
+[08/13 08:44:05 graph]: Epoch 52 | train_loss: 0.1424 | lr: 0.000292
+[08/13 08:44:09 graph]: #Test_f1: 0.9094±0.0539
+[08/13 08:44:09 graph]: Epoch 52: get test f1 score:  0.909
+[08/13 08:44:09 graph]: best_f1 0.909 at epoch 52
+[08/13 08:44:09 graph]: Epoch 53 | train_loss: 0.1378 | lr: 0.000292
+[08/13 08:44:12 graph]: #Test_f1: 0.8880±0.0447
+[08/13 08:44:12 graph]: Epoch 53: get test f1 score:  0.888
+[08/13 08:44:12 graph]: best_f1 0.909 at epoch 52
+[08/13 08:44:13 graph]: Epoch 54 | train_loss: 0.1502 | lr: 0.000292
+[08/13 08:44:16 graph]: #Test_f1: 0.8883±0.0688
+[08/13 08:44:16 graph]: Epoch 54: get test f1 score:  0.888
+[08/13 08:44:16 graph]: best_f1 0.909 at epoch 52
+[08/13 08:44:16 graph]: Epoch 55 | train_loss: 0.1449 | lr: 0.000292
+[08/13 08:44:20 graph]: #Test_f1: 0.9041±0.0575
+[08/13 08:44:20 graph]: Epoch 55: get test f1 score:  0.904
+[08/13 08:44:20 graph]: best_f1 0.909 at epoch 52
+[08/13 08:44:20 graph]: Epoch 56 | train_loss: 0.1410 | lr: 0.000292
+[08/13 08:44:23 graph]: #Test_f1: 0.8936±0.0533
+[08/13 08:44:23 graph]: Epoch 56: get test f1 score:  0.894
+[08/13 08:44:23 graph]: best_f1 0.909 at epoch 52
+[08/13 08:44:23 graph]: Epoch 57 | train_loss: 0.1441 | lr: 0.000292
+[08/13 08:44:27 graph]: #Test_f1: 0.8883±0.0602
+[08/13 08:44:27 graph]: Epoch 57: get test f1 score:  0.888
+[08/13 08:44:27 graph]: best_f1 0.909 at epoch 52
+[08/13 08:44:27 graph]: Epoch 58 | train_loss: 0.1436 | lr: 0.000292
+[08/13 08:44:30 graph]: #Test_f1: 0.8673±0.0589
+[08/13 08:44:30 graph]: Epoch 58: get test f1 score:  0.867
+[08/13 08:44:30 graph]: best_f1 0.909 at epoch 52
+[08/13 08:44:31 graph]: Epoch 59 | train_loss: 0.1359 | lr: 0.000292
+[08/13 08:44:34 graph]: #Test_f1: 0.8778±0.0670
+[08/13 08:44:34 graph]: Epoch 59: get test f1 score:  0.878
+[08/13 08:44:34 graph]: best_f1 0.909 at epoch 52
+[08/13 08:44:34 graph]: Epoch 60 | train_loss: 0.1404 | lr: 0.000292
+[08/13 08:44:37 graph]: #Test_f1: 0.8775±0.0721
+[08/13 08:44:37 graph]: Epoch 60: get test f1 score:  0.877
+[08/13 08:44:37 graph]: best_f1 0.909 at epoch 52
+[08/13 08:44:37 graph]: Epoch 61 | train_loss: 0.1298 | lr: 0.000292
+[08/13 08:44:41 graph]: #Test_f1: 0.8775±0.0721
+[08/13 08:44:41 graph]: Epoch 61: get test f1 score:  0.877
+[08/13 08:44:41 graph]: best_f1 0.909 at epoch 52
+[08/13 08:44:41 graph]: Epoch 62 | train_loss: 0.1391 | lr: 0.000292
+[08/13 08:44:44 graph]: #Test_f1: 0.8880±0.0659
+[08/13 08:44:44 graph]: Epoch 62: get test f1 score:  0.888
+[08/13 08:44:44 graph]: best_f1 0.909 at epoch 52
+[08/13 08:44:45 graph]: Epoch 63 | train_loss: 0.1321 | lr: 0.000292
+[08/13 08:44:48 graph]: #Test_f1: 0.8670±0.0687
+[08/13 08:44:48 graph]: Epoch 63: get test f1 score:  0.867
+[08/13 08:44:48 graph]: best_f1 0.909 at epoch 52
+[08/13 08:44:48 graph]: Epoch 64 | train_loss: 0.1327 | lr: 0.000292
+[08/13 08:44:51 graph]: #Test_f1: 0.8722±0.0763
+[08/13 08:44:51 graph]: Epoch 64: get test f1 score:  0.872
+[08/13 08:44:51 graph]: best_f1 0.909 at epoch 52
+[08/13 08:44:52 graph]: Epoch 65 | train_loss: 0.1272 | lr: 0.000292
+[08/13 08:44:56 graph]: #Test_f1: 0.8673±0.0677
+[08/13 08:44:56 graph]: Epoch 65: get test f1 score:  0.867
+[08/13 08:44:56 graph]: best_f1 0.909 at epoch 52
+[08/13 08:44:56 graph]: Epoch 66 | train_loss: 0.1311 | lr: 0.000292
+[08/13 08:45:01 graph]: #Test_f1: 0.8778±0.0710
+[08/13 08:45:01 graph]: Epoch 66: get test f1 score:  0.878
+[08/13 08:45:01 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:01 graph]: Epoch 67 | train_loss: 0.1292 | lr: 0.000292
+[08/13 08:45:05 graph]: #Test_f1: 0.8670±0.0687
+[08/13 08:45:05 graph]: Epoch 67: get test f1 score:  0.867
+[08/13 08:45:05 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:05 graph]: Epoch 68 | train_loss: 0.1319 | lr: 0.000292
+[08/13 08:45:08 graph]: #Test_f1: 0.8670±0.0646
+[08/13 08:45:08 graph]: Epoch 68: get test f1 score:  0.867
+[08/13 08:45:08 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:08 graph]: Epoch 69 | train_loss: 0.1302 | lr: 0.000292
+[08/13 08:45:12 graph]: #Test_f1: 0.8617±0.0684
+[08/13 08:45:12 graph]: Epoch 69: get test f1 score:  0.862
+[08/13 08:45:12 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:12 graph]: Epoch 70 | train_loss: 0.1411 | lr: 0.000292
+[08/13 08:45:15 graph]: #Test_f1: 0.8830±0.0776
+[08/13 08:45:15 graph]: Epoch 70: get test f1 score:  0.883
+[08/13 08:45:15 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:16 graph]: Epoch 71 | train_loss: 0.1376 | lr: 0.000292
+[08/13 08:45:19 graph]: #Test_f1: 0.8670±0.0687
+[08/13 08:45:19 graph]: Epoch 71: get test f1 score:  0.867
+[08/13 08:45:19 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:19 graph]: Epoch 72 | train_loss: 0.1350 | lr: 0.000292
+[08/13 08:45:23 graph]: #Test_f1: 0.8827±0.0786
+[08/13 08:45:23 graph]: Epoch 72: get test f1 score:  0.883
+[08/13 08:45:23 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:23 graph]: Epoch 73 | train_loss: 0.1306 | lr: 0.000292
+[08/13 08:45:26 graph]: #Test_f1: 0.8775±0.0721
+[08/13 08:45:26 graph]: Epoch 73: get test f1 score:  0.877
+[08/13 08:45:26 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:27 graph]: Epoch 74 | train_loss: 0.1312 | lr: 0.000292
+[08/13 08:45:30 graph]: #Test_f1: 0.8564±0.0540
+[08/13 08:45:30 graph]: Epoch 74: get test f1 score:  0.856
+[08/13 08:45:30 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:30 graph]: Epoch 75 | train_loss: 0.1281 | lr: 0.000292
+[08/13 08:45:33 graph]: #Test_f1: 0.8558±0.0548
+[08/13 08:45:33 graph]: Epoch 75: get test f1 score:  0.856
+[08/13 08:45:33 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:34 graph]: Epoch 76 | train_loss: 0.1342 | lr: 0.000292
+[08/13 08:45:37 graph]: #Test_f1: 0.8775±0.0758
+[08/13 08:45:37 graph]: Epoch 76: get test f1 score:  0.877
+[08/13 08:45:37 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:37 graph]: Epoch 77 | train_loss: 0.1281 | lr: 0.000292
+[08/13 08:45:41 graph]: #Test_f1: 0.8827±0.0786
+[08/13 08:45:41 graph]: Epoch 77: get test f1 score:  0.883
+[08/13 08:45:41 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:41 graph]: Epoch 78 | train_loss: 0.1312 | lr: 0.000292
+[08/13 08:45:44 graph]: #Test_f1: 0.8775±0.0639
+[08/13 08:45:44 graph]: Epoch 78: get test f1 score:  0.877
+[08/13 08:45:44 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:45 graph]: Epoch 79 | train_loss: 0.1228 | lr: 0.000292
+[08/13 08:45:48 graph]: #Test_f1: 0.8775±0.0721
+[08/13 08:45:48 graph]: Epoch 79: get test f1 score:  0.877
+[08/13 08:45:48 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:48 graph]: Epoch 80 | train_loss: 0.1234 | lr: 0.000292
+[08/13 08:45:51 graph]: #Test_f1: 0.8827±0.0672
+[08/13 08:45:51 graph]: Epoch 80: get test f1 score:  0.883
+[08/13 08:45:51 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:52 graph]: Epoch 81 | train_loss: 0.1277 | lr: 0.000292
+[08/13 08:45:55 graph]: #Test_f1: 0.8778±0.0628
+[08/13 08:45:55 graph]: Epoch 81: get test f1 score:  0.878
+[08/13 08:45:55 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:55 graph]: Epoch 82 | train_loss: 0.1222 | lr: 0.000292
+[08/13 08:45:58 graph]: #Test_f1: 0.8775±0.0534
+[08/13 08:45:58 graph]: Epoch 82: get test f1 score:  0.877
+[08/13 08:45:58 graph]: best_f1 0.909 at epoch 52
+[08/13 08:45:59 graph]: Epoch 83 | train_loss: 0.1236 | lr: 0.000292
+[08/13 08:46:02 graph]: #Test_f1: 0.8561±0.0803
+[08/13 08:46:02 graph]: Epoch 83: get test f1 score:  0.856
+[08/13 08:46:02 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:02 graph]: Epoch 84 | train_loss: 0.1259 | lr: 0.000292
+[08/13 08:46:06 graph]: #Test_f1: 0.8614±0.0774
+[08/13 08:46:06 graph]: Epoch 84: get test f1 score:  0.861
+[08/13 08:46:06 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:06 graph]: Epoch 85 | train_loss: 0.1251 | lr: 0.000292
+[08/13 08:46:09 graph]: #Test_f1: 0.8614±0.0599
+[08/13 08:46:09 graph]: Epoch 85: get test f1 score:  0.861
+[08/13 08:46:09 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:09 graph]: Epoch 86 | train_loss: 0.1302 | lr: 0.000292
+[08/13 08:46:13 graph]: #Test_f1: 0.8883±0.0602
+[08/13 08:46:13 graph]: Epoch 86: get test f1 score:  0.888
+[08/13 08:46:13 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:13 graph]: Epoch 87 | train_loss: 0.1393 | lr: 0.000292
+[08/13 08:46:16 graph]: #Test_f1: 0.8883±0.0602
+[08/13 08:46:16 graph]: Epoch 87: get test f1 score:  0.888
+[08/13 08:46:16 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:16 graph]: Epoch 88 | train_loss: 0.1341 | lr: 0.000292
+[08/13 08:46:19 graph]: #Test_f1: 0.8564±0.0717
+[08/13 08:46:19 graph]: Epoch 88: get test f1 score:  0.856
+[08/13 08:46:19 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:20 graph]: Epoch 89 | train_loss: 0.1366 | lr: 0.000292
+[08/13 08:46:23 graph]: #Test_f1: 0.8564±0.0589
+[08/13 08:46:23 graph]: Epoch 89: get test f1 score:  0.856
+[08/13 08:46:23 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:23 graph]: Epoch 90 | train_loss: 0.1367 | lr: 0.000292
+[08/13 08:46:27 graph]: #Test_f1: 0.8722±0.0600
+[08/13 08:46:27 graph]: Epoch 90: get test f1 score:  0.872
+[08/13 08:46:27 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:27 graph]: Epoch 91 | train_loss: 0.1359 | lr: 0.000292
+[08/13 08:46:30 graph]: #Test_f1: 0.8775±0.0594
+[08/13 08:46:30 graph]: Epoch 91: get test f1 score:  0.877
+[08/13 08:46:30 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:31 graph]: Epoch 92 | train_loss: 0.1314 | lr: 0.000292
+[08/13 08:46:34 graph]: #Test_f1: 0.8883±0.0602
+[08/13 08:46:34 graph]: Epoch 92: get test f1 score:  0.888
+[08/13 08:46:34 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:34 graph]: Epoch 93 | train_loss: 0.1257 | lr: 0.000292
+[08/13 08:46:37 graph]: #Test_f1: 0.8564±0.0635
+[08/13 08:46:37 graph]: Epoch 93: get test f1 score:  0.856
+[08/13 08:46:37 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:38 graph]: Epoch 94 | train_loss: 0.1274 | lr: 0.000292
+[08/13 08:46:41 graph]: #Test_f1: 0.8775±0.0721
+[08/13 08:46:41 graph]: Epoch 94: get test f1 score:  0.877
+[08/13 08:46:41 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:41 graph]: Epoch 95 | train_loss: 0.1353 | lr: 0.000292
+[08/13 08:46:44 graph]: #Test_f1: 0.8725±0.0539
+[08/13 08:46:44 graph]: Epoch 95: get test f1 score:  0.873
+[08/13 08:46:44 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:45 graph]: Epoch 96 | train_loss: 0.1326 | lr: 0.000292
+[08/13 08:46:48 graph]: #Test_f1: 0.8830±0.0617
+[08/13 08:46:48 graph]: Epoch 96: get test f1 score:  0.883
+[08/13 08:46:48 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:48 graph]: Epoch 97 | train_loss: 0.1326 | lr: 0.000292
+[08/13 08:46:52 graph]: #Test_f1: 0.8673±0.0677
+[08/13 08:46:52 graph]: Epoch 97: get test f1 score:  0.867
+[08/13 08:46:52 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:52 graph]: Epoch 98 | train_loss: 0.1235 | lr: 0.000292
+[08/13 08:46:55 graph]: #Test_f1: 0.8936±0.0582
+[08/13 08:46:55 graph]: Epoch 98: get test f1 score:  0.894
+[08/13 08:46:55 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:55 graph]: Epoch 99 | train_loss: 0.1250 | lr: 0.000292
+[08/13 08:46:59 graph]: #Test_f1: 0.8883±0.0602
+[08/13 08:46:59 graph]: Epoch 99: get test f1 score:  0.888
+[08/13 08:46:59 graph]: best_f1 0.909 at epoch 52
+[08/13 08:46:59 graph]: # final_acc: 0.9094±0.0000
+
+Process finished with exit code 0
+
+
+
+8888888888888888888888888888888888888888888888888888888888888888888
+/root/miniconda3/envs/myconda/bin/python /mnt/DDm0813/GraphExp/main_graph.py
+True
+Tesla P100-SXM2-16GB
+DGL version: 0.9.1post1
+{'DATA': {'data_name': 'MUTAG', 'deg4feat': True}, 'DATALOADER': {'NUM_WORKERS': 0, 'BATCH_SIZE': 16}, 'MODEL': {'num_hidden': 512, 'num_layers': 2, 'nhead': 4, 'activation': 'prelu', 'attn_drop': 0.1, 'feat_drop': 0.2, 'norm': 'layernorm', 'pooler': 'mean', 'beta_schedule': 'sigmoid', 'beta_1': 0.000335, 'beta_T': 0.03379, 'T': 728}, 'SOLVER': {'optim_type': 'adamw', 'optim_type_f': 'adamw', 'alpha': 1, 'decay': 30, 'LR': 0.000292, 'weight_decay': 0.0005, 'MAX_EPOCH': 100}, 'DEVICE': 'cuda', 'seeds': [11], 'eval_T': [50, 100, 200], 'output_dir': '/mnt/DDm0813/GraphExp/log', 'checkpoint_dir': '/mnt/DDm0813/GraphExp/log/checkpoint'}
+[08/15 10:18:21 graph]: Rank of current process: 0. World size: 1
+[08/15 10:18:22 graph]: Environment info:
+PyTorch version: 1.11.0+cu113
+Is debug build: False
+CUDA used to build PyTorch: 11.3
+ROCM used to build PyTorch: N/A
+
+OS: Ubuntu 18.04.6 LTS (x86_64)
+GCC version: (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+Clang version: Could not collect
+CMake version: version 3.10.2
+Libc version: glibc-2.27
+
+Python version: 3.8.12 (default, Oct 12 2021, 13:49:34)  [GCC 7.5.0] (64-bit runtime)
+Python platform: Linux-4.19.0-14-amd64-x86_64-with-glibc2.17
+Is CUDA available: True
+CUDA runtime version: Could not collect
+GPU models and configuration: GPU 0: Tesla P100-SXM2-16GB
+Nvidia driver version: 470.94
+cuDNN version: Probably one of the following:
+/usr/lib/x86_64-linux-gnu/libcudnn.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_infer.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_train.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_infer.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_train.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_infer.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_train.so.8.2.0
+HIP runtime version: N/A
+MIOpen runtime version: N/A
+
+Versions of relevant libraries:
+[pip3] numpy==1.22.3
+[pip3] torch==1.11.0+cu113
+[pip3] torchaudio==0.11.0+cu113
+[pip3] torchvision==0.12.0+cu113
+[conda] Could not collect
+        Pillow (9.0.1)
+[08/15 10:18:22 graph]: Command line arguments: Namespace(checkpoint_dir=None, local_rank=0, output_dir=None, resume=False, seed=1234, start_epoch=0, yaml_dir=None)
+Processing node features
+******** # Num Graphs: 460, # Num Feat: 90, # Num Classes: 3 ********
+Number of features: 90
+Number of classes: 3
+[08/15 10:18:23 graph]: Run 0th for seed 11
+[08/15 10:18:23 graph]: Total trainable params num : 5269262
+[08/15 10:18:26 graph]: ----------Start Training----------
+[08/15 10:18:27 graph]: Epoch 0 | train_loss: 0.8094 | lr: 0.000292
+[08/15 10:18:28 graph]: Epoch 1 | train_loss: 0.6387 | lr: 0.000292
+[08/15 10:18:29 graph]: Epoch 2 | train_loss: 0.5841 | lr: 0.000292
+[08/15 10:18:37 graph]: #Test_f1: 0.5609±0.0783
+[08/15 10:18:37 graph]: Epoch 2: get test f1 score:  0.561
+[08/15 10:18:37 graph]: best_f1 0.561 at epoch 2
+[08/15 10:18:40 graph]: Epoch 3 | train_loss: 0.5583 | lr: 0.000292
+[08/15 10:18:47 graph]: #Test_f1: 0.5674±0.0618
+[08/15 10:18:47 graph]: Epoch 3: get test f1 score:  0.567
+[08/15 10:18:47 graph]: best_f1 0.567 at epoch 3
+[08/15 10:18:50 graph]: Epoch 4 | train_loss: 0.5426 | lr: 0.000292
+[08/15 10:18:57 graph]: #Test_f1: 0.5565±0.0552
+[08/15 10:18:57 graph]: Epoch 4: get test f1 score:  0.557
+[08/15 10:18:57 graph]: best_f1 0.567 at epoch 3
+WARNING:root:The OGB package is out of date. Your version is 1.3.5, while the latest version is 1.3.6.
+[08/15 10:18:59 graph]: Epoch 5 | train_loss: 0.5290 | lr: 0.000292
+[08/15 10:19:06 graph]: #Test_f1: 0.5587±0.0467
+[08/15 10:19:06 graph]: Epoch 5: get test f1 score:  0.559
+[08/15 10:19:06 graph]: best_f1 0.567 at epoch 3
+[08/15 10:19:09 graph]: Epoch 6 | train_loss: 0.5190 | lr: 0.000292
+[08/15 10:19:16 graph]: #Test_f1: 0.5348±0.0767
+[08/15 10:19:16 graph]: Epoch 6: get test f1 score:  0.535
+[08/15 10:19:16 graph]: best_f1 0.567 at epoch 3
+[08/15 10:19:18 graph]: Epoch 7 | train_loss: 0.5120 | lr: 0.000292
+[08/15 10:19:25 graph]: #Test_f1: 0.5478±0.0513
+[08/15 10:19:25 graph]: Epoch 7: get test f1 score:  0.548
+[08/15 10:19:25 graph]: best_f1 0.567 at epoch 3
+[08/15 10:19:28 graph]: Epoch 8 | train_loss: 0.5049 | lr: 0.000292
+[08/15 10:19:35 graph]: #Test_f1: 0.5522±0.0534
+[08/15 10:19:35 graph]: Epoch 8: get test f1 score:  0.552
+[08/15 10:19:35 graph]: best_f1 0.567 at epoch 3
+[08/15 10:19:37 graph]: Epoch 9 | train_loss: 0.5004 | lr: 0.000292
+[08/15 10:19:44 graph]: #Test_f1: 0.5413±0.0406
+[08/15 10:19:44 graph]: Epoch 9: get test f1 score:  0.541
+[08/15 10:19:44 graph]: best_f1 0.567 at epoch 3
+[08/15 10:19:46 graph]: Epoch 10 | train_loss: 0.4943 | lr: 0.000292
+[08/15 10:19:54 graph]: #Test_f1: 0.5391±0.0629
+[08/15 10:19:54 graph]: Epoch 10: get test f1 score:  0.539
+[08/15 10:19:54 graph]: best_f1 0.567 at epoch 3
+[08/15 10:19:56 graph]: Epoch 11 | train_loss: 0.4895 | lr: 0.000292
+[08/15 10:20:03 graph]: #Test_f1: 0.5261±0.0658
+[08/15 10:20:03 graph]: Epoch 11: get test f1 score:  0.526
+[08/15 10:20:03 graph]: best_f1 0.567 at epoch 3
+[08/15 10:20:05 graph]: Epoch 12 | train_loss: 0.4862 | lr: 0.000292
+[08/15 10:20:13 graph]: #Test_f1: 0.5500±0.0457
+[08/15 10:20:13 graph]: Epoch 12: get test f1 score:  0.550
+[08/15 10:20:13 graph]: best_f1 0.567 at epoch 3
+[08/15 10:20:15 graph]: Epoch 13 | train_loss: 0.4836 | lr: 0.000292
+[08/15 10:20:22 graph]: #Test_f1: 0.5326±0.0508
+[08/15 10:20:22 graph]: Epoch 13: get test f1 score:  0.533
+[08/15 10:20:22 graph]: best_f1 0.567 at epoch 3
+[08/15 10:20:25 graph]: Epoch 14 | train_loss: 0.4799 | lr: 0.000292
+[08/15 10:20:32 graph]: #Test_f1: 0.5500±0.0623
+[08/15 10:20:32 graph]: Epoch 14: get test f1 score:  0.550
+[08/15 10:20:32 graph]: best_f1 0.567 at epoch 3
+[08/15 10:20:34 graph]: Epoch 15 | train_loss: 0.4769 | lr: 0.000292
+[08/15 10:20:42 graph]: #Test_f1: 0.5348±0.0609
+[08/15 10:20:42 graph]: Epoch 15: get test f1 score:  0.535
+[08/15 10:20:42 graph]: best_f1 0.567 at epoch 3
+[08/15 10:20:44 graph]: Epoch 16 | train_loss: 0.4746 | lr: 0.000292
+[08/15 10:20:51 graph]: #Test_f1: 0.5435±0.0550
+[08/15 10:20:51 graph]: Epoch 16: get test f1 score:  0.543
+[08/15 10:20:51 graph]: best_f1 0.567 at epoch 3
+[08/15 10:20:54 graph]: Epoch 17 | train_loss: 0.4726 | lr: 0.000292
+[08/15 10:21:01 graph]: #Test_f1: 0.5435±0.0607
+[08/15 10:21:01 graph]: Epoch 17: get test f1 score:  0.543
+[08/15 10:21:01 graph]: best_f1 0.567 at epoch 3
+[08/15 10:21:03 graph]: Epoch 18 | train_loss: 0.4695 | lr: 0.000292
+[08/15 10:21:11 graph]: #Test_f1: 0.5348±0.0826
+[08/15 10:21:11 graph]: Epoch 18: get test f1 score:  0.535
+[08/15 10:21:11 graph]: best_f1 0.567 at epoch 3
+[08/15 10:21:13 graph]: Epoch 19 | train_loss: 0.4688 | lr: 0.000292
+[08/15 10:21:21 graph]: #Test_f1: 0.5478±0.0752
+[08/15 10:21:21 graph]: Epoch 19: get test f1 score:  0.548
+[08/15 10:21:21 graph]: best_f1 0.567 at epoch 3
+[08/15 10:21:23 graph]: Epoch 20 | train_loss: 0.4673 | lr: 0.000292
+[08/15 10:21:30 graph]: #Test_f1: 0.5478±0.0693
+[08/15 10:21:30 graph]: Epoch 20: get test f1 score:  0.548
+[08/15 10:21:30 graph]: best_f1 0.567 at epoch 3
+[08/15 10:21:33 graph]: Epoch 21 | train_loss: 0.4650 | lr: 0.000292
+[08/15 10:21:40 graph]: #Test_f1: 0.5435±0.0607
+[08/15 10:21:40 graph]: Epoch 21: get test f1 score:  0.543
+[08/15 10:21:40 graph]: best_f1 0.567 at epoch 3
+
+
+
+888888888888888888888888888888888888888888888888888888888888888888888888888888888
+
+
+[08/15 14:33:27 graph]: ----------Start Training----------
+[08/15 14:33:29 graph]: Epoch 0 | train_loss: 0.8633 | lr: 0.000292
+[08/15 14:33:30 graph]: Epoch 1 | train_loss: 0.6883 | lr: 0.000292
+[08/15 14:33:30 graph]: Epoch 2 | train_loss: 0.6310 | lr: 0.000292
+[08/15 14:33:34 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:33:34 graph]: Epoch 2: get test f1 score:  0.783
+[08/15 14:33:34 graph]: best_f1 0.783 at epoch 2
+[08/15 14:33:38 graph]: Epoch 3 | train_loss: 0.5908 | lr: 0.000292
+[08/15 14:33:42 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:33:42 graph]: Epoch 3: get test f1 score:  0.783
+[08/15 14:33:42 graph]: best_f1 0.783 at epoch 2
+[08/15 14:33:43 graph]: Epoch 4 | train_loss: 0.5657 | lr: 0.000292
+[08/15 14:33:47 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:33:47 graph]: Epoch 4: get test f1 score:  0.783
+[08/15 14:33:47 graph]: best_f1 0.783 at epoch 2
+[08/15 14:33:49 graph]: Epoch 5 | train_loss: 0.5477 | lr: 0.000292
+[08/15 14:33:53 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:33:53 graph]: Epoch 5: get test f1 score:  0.783
+[08/15 14:33:53 graph]: best_f1 0.783 at epoch 2
+[08/15 14:33:55 graph]: Epoch 6 | train_loss: 0.5347 | lr: 0.000292
+[08/15 14:33:59 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:33:59 graph]: Epoch 6: get test f1 score:  0.783
+[08/15 14:33:59 graph]: best_f1 0.783 at epoch 2
+[08/15 14:34:00 graph]: Epoch 7 | train_loss: 0.5258 | lr: 0.000292
+[08/15 14:34:04 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:34:04 graph]: Epoch 7: get test f1 score:  0.783
+[08/15 14:34:04 graph]: best_f1 0.783 at epoch 2
+[08/15 14:34:06 graph]: Epoch 8 | train_loss: 0.5189 | lr: 0.000292
+[08/15 14:34:10 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:34:10 graph]: Epoch 8: get test f1 score:  0.783
+[08/15 14:34:10 graph]: best_f1 0.783 at epoch 2
+[08/15 14:34:12 graph]: Epoch 9 | train_loss: 0.5116 | lr: 0.000292
+[08/15 14:34:16 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:34:16 graph]: Epoch 9: get test f1 score:  0.783
+[08/15 14:34:16 graph]: best_f1 0.783 at epoch 2
+[08/15 14:34:24 graph]: Epoch 10 | train_loss: 0.5056 | lr: 0.000292
+[08/15 14:34:28 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:34:28 graph]: Epoch 10: get test f1 score:  0.783
+[08/15 14:34:28 graph]: best_f1 0.783 at epoch 2
+[08/15 14:34:30 graph]: Epoch 11 | train_loss: 0.5027 | lr: 0.000292
+[08/15 14:34:34 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:34:34 graph]: Epoch 11: get test f1 score:  0.783
+[08/15 14:34:34 graph]: best_f1 0.783 at epoch 2
+[08/15 14:34:36 graph]: Epoch 12 | train_loss: 0.4970 | lr: 0.000292
+[08/15 14:34:40 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:34:40 graph]: Epoch 12: get test f1 score:  0.783
+[08/15 14:34:40 graph]: best_f1 0.783 at epoch 2
+[08/15 14:34:42 graph]: Epoch 13 | train_loss: 0.4948 | lr: 0.000292
+[08/15 14:34:46 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:34:46 graph]: Epoch 13: get test f1 score:  0.783
+[08/15 14:34:46 graph]: best_f1 0.783 at epoch 2
+[08/15 14:34:48 graph]: Epoch 14 | train_loss: 0.4904 | lr: 0.000292
+[08/15 14:34:52 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:34:52 graph]: Epoch 14: get test f1 score:  0.783
+[08/15 14:34:52 graph]: best_f1 0.783 at epoch 2
+[08/15 14:34:53 graph]: Epoch 15 | train_loss: 0.4866 | lr: 0.000292
+[08/15 14:34:57 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:34:57 graph]: Epoch 15: get test f1 score:  0.783
+[08/15 14:34:57 graph]: best_f1 0.783 at epoch 2
+[08/15 14:34:59 graph]: Epoch 16 | train_loss: 0.4845 | lr: 0.000292
+[08/15 14:35:03 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:35:03 graph]: Epoch 16: get test f1 score:  0.783
+[08/15 14:35:03 graph]: best_f1 0.783 at epoch 2
+[08/15 14:35:05 graph]: Epoch 17 | train_loss: 0.4823 | lr: 0.000292
+[08/15 14:35:09 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:35:09 graph]: Epoch 17: get test f1 score:  0.783
+[08/15 14:35:09 graph]: best_f1 0.783 at epoch 2
+[08/15 14:35:11 graph]: Epoch 18 | train_loss: 0.4813 | lr: 0.000292
+[08/15 14:35:15 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:35:15 graph]: Epoch 18: get test f1 score:  0.783
+[08/15 14:35:15 graph]: best_f1 0.783 at epoch 2
+[08/15 14:35:16 graph]: Epoch 19 | train_loss: 0.4785 | lr: 0.000292
+[08/15 14:35:21 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:35:21 graph]: Epoch 19: get test f1 score:  0.783
+[08/15 14:35:21 graph]: best_f1 0.783 at epoch 2
+[08/15 14:35:22 graph]: Epoch 20 | train_loss: 0.4745 | lr: 0.000292
+[08/15 14:35:26 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:35:26 graph]: Epoch 20: get test f1 score:  0.783
+[08/15 14:35:26 graph]: best_f1 0.783 at epoch 2
+[08/15 14:35:28 graph]: Epoch 21 | train_loss: 0.4729 | lr: 0.000292
+[08/15 14:35:32 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:35:32 graph]: Epoch 21: get test f1 score:  0.783
+[08/15 14:35:32 graph]: best_f1 0.783 at epoch 2
+[08/15 14:35:34 graph]: Epoch 22 | train_loss: 0.4727 | lr: 0.000292
+[08/15 14:35:38 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:35:38 graph]: Epoch 22: get test f1 score:  0.783
+[08/15 14:35:38 graph]: best_f1 0.783 at epoch 2
+[08/15 14:35:40 graph]: Epoch 23 | train_loss: 0.4714 | lr: 0.000292
+[08/15 14:35:44 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:35:44 graph]: Epoch 23: get test f1 score:  0.783
+[08/15 14:35:44 graph]: best_f1 0.783 at epoch 2
+[08/15 14:35:46 graph]: Epoch 24 | train_loss: 0.4674 | lr: 0.000292
+[08/15 14:35:50 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:35:50 graph]: Epoch 24: get test f1 score:  0.783
+[08/15 14:35:50 graph]: best_f1 0.783 at epoch 2
+[08/15 14:35:51 graph]: Epoch 25 | train_loss: 0.4671 | lr: 0.000292
+[08/15 14:35:55 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:35:55 graph]: Epoch 25: get test f1 score:  0.783
+[08/15 14:35:55 graph]: best_f1 0.783 at epoch 2
+[08/15 14:35:57 graph]: Epoch 26 | train_loss: 0.4646 | lr: 0.000292
+[08/15 14:36:01 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:36:01 graph]: Epoch 26: get test f1 score:  0.783
+[08/15 14:36:01 graph]: best_f1 0.783 at epoch 2
+[08/15 14:36:03 graph]: Epoch 27 | train_loss: 0.4637 | lr: 0.000292
+[08/15 14:36:07 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:36:07 graph]: Epoch 27: get test f1 score:  0.783
+[08/15 14:36:07 graph]: best_f1 0.783 at epoch 2
+[08/15 14:36:09 graph]: Epoch 28 | train_loss: 0.4611 | lr: 0.000292
+[08/15 14:36:13 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:36:13 graph]: Epoch 28: get test f1 score:  0.783
+[08/15 14:36:13 graph]: best_f1 0.783 at epoch 2
+[08/15 14:36:14 graph]: Epoch 29 | train_loss: 0.4604 | lr: 0.000292
+[08/15 14:36:19 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:36:19 graph]: Epoch 29: get test f1 score:  0.783
+[08/15 14:36:19 graph]: best_f1 0.783 at epoch 2
+[08/15 14:36:20 graph]: Epoch 30 | train_loss: 0.4588 | lr: 0.000292
+[08/15 14:36:24 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:36:24 graph]: Epoch 30: get test f1 score:  0.783
+[08/15 14:36:24 graph]: best_f1 0.783 at epoch 2
+[08/15 14:36:26 graph]: Epoch 31 | train_loss: 0.4576 | lr: 0.000292
+[08/15 14:36:30 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:36:30 graph]: Epoch 31: get test f1 score:  0.783
+[08/15 14:36:30 graph]: best_f1 0.783 at epoch 2
+[08/15 14:36:32 graph]: Epoch 32 | train_loss: 0.4552 | lr: 0.000292
+[08/15 14:36:36 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:36:36 graph]: Epoch 32: get test f1 score:  0.783
+[08/15 14:36:36 graph]: best_f1 0.783 at epoch 2
+[08/15 14:36:38 graph]: Epoch 33 | train_loss: 0.4562 | lr: 0.000292
+[08/15 14:36:42 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:36:42 graph]: Epoch 33: get test f1 score:  0.783
+[08/15 14:36:42 graph]: best_f1 0.783 at epoch 2
+[08/15 14:36:44 graph]: Epoch 34 | train_loss: 0.4535 | lr: 0.000292
+[08/15 14:36:48 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:36:48 graph]: Epoch 34: get test f1 score:  0.783
+[08/15 14:36:48 graph]: best_f1 0.783 at epoch 2
+[08/15 14:36:50 graph]: Epoch 35 | train_loss: 0.4531 | lr: 0.000292
+[08/15 14:36:54 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:36:54 graph]: Epoch 35: get test f1 score:  0.783
+[08/15 14:36:54 graph]: best_f1 0.783 at epoch 2
+[08/15 14:36:56 graph]: Epoch 36 | train_loss: 0.4502 | lr: 0.000292
+[08/15 14:37:00 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:37:00 graph]: Epoch 36: get test f1 score:  0.783
+[08/15 14:37:00 graph]: best_f1 0.783 at epoch 2
+[08/15 14:37:01 graph]: Epoch 37 | train_loss: 0.4512 | lr: 0.000292
+[08/15 14:37:05 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:37:05 graph]: Epoch 37: get test f1 score:  0.783
+[08/15 14:37:05 graph]: best_f1 0.783 at epoch 2
+[08/15 14:37:07 graph]: Epoch 38 | train_loss: 0.4487 | lr: 0.000292
+[08/15 14:37:11 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:37:11 graph]: Epoch 38: get test f1 score:  0.783
+[08/15 14:37:11 graph]: best_f1 0.783 at epoch 2
+[08/15 14:37:13 graph]: Epoch 39 | train_loss: 0.4474 | lr: 0.000292
+[08/15 14:37:17 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:37:17 graph]: Epoch 39: get test f1 score:  0.783
+[08/15 14:37:17 graph]: best_f1 0.783 at epoch 2
+[08/15 14:37:18 graph]: Epoch 40 | train_loss: 0.4461 | lr: 0.000292
+[08/15 14:37:22 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:37:22 graph]: Epoch 40: get test f1 score:  0.783
+[08/15 14:37:22 graph]: best_f1 0.783 at epoch 2
+[08/15 14:37:24 graph]: Epoch 41 | train_loss: 0.4467 | lr: 0.000292
+[08/15 14:37:28 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:37:28 graph]: Epoch 41: get test f1 score:  0.783
+[08/15 14:37:28 graph]: best_f1 0.783 at epoch 2
+[08/15 14:37:30 graph]: Epoch 42 | train_loss: 0.4463 | lr: 0.000292
+[08/15 14:37:34 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:37:34 graph]: Epoch 42: get test f1 score:  0.783
+[08/15 14:37:34 graph]: best_f1 0.783 at epoch 2
+[08/15 14:37:36 graph]: Epoch 43 | train_loss: 0.4445 | lr: 0.000292
+[08/15 14:37:40 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:37:40 graph]: Epoch 43: get test f1 score:  0.783
+[08/15 14:37:40 graph]: best_f1 0.783 at epoch 2
+[08/15 14:37:42 graph]: Epoch 44 | train_loss: 0.4454 | lr: 0.000292
+[08/15 14:37:46 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:37:46 graph]: Epoch 44: get test f1 score:  0.783
+[08/15 14:37:46 graph]: best_f1 0.783 at epoch 2
+[08/15 14:37:48 graph]: Epoch 45 | train_loss: 0.4451 | lr: 0.000292
+[08/15 14:37:52 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:37:52 graph]: Epoch 45: get test f1 score:  0.783
+[08/15 14:37:52 graph]: best_f1 0.783 at epoch 2
+[08/15 14:37:53 graph]: Epoch 46 | train_loss: 0.4460 | lr: 0.000292
+[08/15 14:37:57 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:37:57 graph]: Epoch 46: get test f1 score:  0.783
+[08/15 14:37:57 graph]: best_f1 0.783 at epoch 2
+[08/15 14:37:59 graph]: Epoch 47 | train_loss: 0.4434 | lr: 0.000292
+[08/15 14:38:03 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:38:03 graph]: Epoch 47: get test f1 score:  0.783
+[08/15 14:38:03 graph]: best_f1 0.783 at epoch 2
+[08/15 14:38:05 graph]: Epoch 48 | train_loss: 0.4437 | lr: 0.000292
+[08/15 14:38:09 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:38:09 graph]: Epoch 48: get test f1 score:  0.783
+[08/15 14:38:09 graph]: best_f1 0.783 at epoch 2
+[08/15 14:38:11 graph]: Epoch 49 | train_loss: 0.4421 | lr: 0.000292
+[08/15 14:38:15 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:38:15 graph]: Epoch 49: get test f1 score:  0.783
+[08/15 14:38:15 graph]: best_f1 0.783 at epoch 2
+[08/15 14:38:17 graph]: Epoch 50 | train_loss: 0.4400 | lr: 0.000292
+[08/15 14:38:21 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:38:21 graph]: Epoch 50: get test f1 score:  0.783
+[08/15 14:38:21 graph]: best_f1 0.783 at epoch 2
+[08/15 14:38:23 graph]: Epoch 51 | train_loss: 0.4388 | lr: 0.000292
+[08/15 14:38:27 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:38:27 graph]: Epoch 51: get test f1 score:  0.783
+[08/15 14:38:27 graph]: best_f1 0.783 at epoch 2
+[08/15 14:38:29 graph]: Epoch 52 | train_loss: 0.4401 | lr: 0.000292
+[08/15 14:38:33 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:38:33 graph]: Epoch 52: get test f1 score:  0.783
+[08/15 14:38:33 graph]: best_f1 0.783 at epoch 2
+[08/15 14:38:35 graph]: Epoch 53 | train_loss: 0.4383 | lr: 0.000292
+[08/15 14:38:39 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:38:39 graph]: Epoch 53: get test f1 score:  0.783
+[08/15 14:38:39 graph]: best_f1 0.783 at epoch 2
+[08/15 14:38:40 graph]: Epoch 54 | train_loss: 0.4403 | lr: 0.000292
+[08/15 14:38:45 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:38:45 graph]: Epoch 54: get test f1 score:  0.783
+[08/15 14:38:45 graph]: best_f1 0.783 at epoch 2
+[08/15 14:38:46 graph]: Epoch 55 | train_loss: 0.4386 | lr: 0.000292
+[08/15 14:38:50 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:38:50 graph]: Epoch 55: get test f1 score:  0.783
+[08/15 14:38:50 graph]: best_f1 0.783 at epoch 2
+[08/15 14:38:52 graph]: Epoch 56 | train_loss: 0.4399 | lr: 0.000292
+[08/15 14:38:56 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:38:56 graph]: Epoch 56: get test f1 score:  0.783
+[08/15 14:38:56 graph]: best_f1 0.783 at epoch 2
+[08/15 14:38:58 graph]: Epoch 57 | train_loss: 0.4398 | lr: 0.000292
+[08/15 14:39:02 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:39:02 graph]: Epoch 57: get test f1 score:  0.783
+[08/15 14:39:02 graph]: best_f1 0.783 at epoch 2
+[08/15 14:39:04 graph]: Epoch 58 | train_loss: 0.4380 | lr: 0.000292
+[08/15 14:39:08 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:39:08 graph]: Epoch 58: get test f1 score:  0.783
+[08/15 14:39:08 graph]: best_f1 0.783 at epoch 2
+[08/15 14:39:10 graph]: Epoch 59 | train_loss: 0.4381 | lr: 0.000292
+[08/15 14:39:14 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:39:14 graph]: Epoch 59: get test f1 score:  0.783
+[08/15 14:39:14 graph]: best_f1 0.783 at epoch 2
+[08/15 14:39:16 graph]: Epoch 60 | train_loss: 0.4384 | lr: 0.000292
+[08/15 14:39:20 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:39:20 graph]: Epoch 60: get test f1 score:  0.783
+[08/15 14:39:20 graph]: best_f1 0.783 at epoch 2
+[08/15 14:39:21 graph]: Epoch 61 | train_loss: 0.4376 | lr: 0.000292
+[08/15 14:39:25 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:39:25 graph]: Epoch 61: get test f1 score:  0.783
+[08/15 14:39:25 graph]: best_f1 0.783 at epoch 2
+[08/15 14:39:27 graph]: Epoch 62 | train_loss: 0.4369 | lr: 0.000292
+[08/15 14:39:31 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:39:31 graph]: Epoch 62: get test f1 score:  0.783
+[08/15 14:39:31 graph]: best_f1 0.783 at epoch 2
+[08/15 14:39:33 graph]: Epoch 63 | train_loss: 0.4354 | lr: 0.000292
+[08/15 14:39:37 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:39:37 graph]: Epoch 63: get test f1 score:  0.783
+[08/15 14:39:37 graph]: best_f1 0.783 at epoch 2
+[08/15 14:39:39 graph]: Epoch 64 | train_loss: 0.4356 | lr: 0.000292
+[08/15 14:39:43 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:39:43 graph]: Epoch 64: get test f1 score:  0.783
+[08/15 14:39:43 graph]: best_f1 0.783 at epoch 2
+[08/15 14:39:45 graph]: Epoch 65 | train_loss: 0.4345 | lr: 0.000292
+[08/15 14:39:49 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:39:49 graph]: Epoch 65: get test f1 score:  0.783
+[08/15 14:39:49 graph]: best_f1 0.783 at epoch 2
+[08/15 14:39:51 graph]: Epoch 66 | train_loss: 0.4355 | lr: 0.000292
+[08/15 14:39:55 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:39:55 graph]: Epoch 66: get test f1 score:  0.783
+[08/15 14:39:55 graph]: best_f1 0.783 at epoch 2
+[08/15 14:39:57 graph]: Epoch 67 | train_loss: 0.4344 | lr: 0.000292
+[08/15 14:40:01 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:40:01 graph]: Epoch 67: get test f1 score:  0.783
+[08/15 14:40:01 graph]: best_f1 0.783 at epoch 2
+[08/15 14:40:03 graph]: Epoch 68 | train_loss: 0.4343 | lr: 0.000292
+[08/15 14:40:07 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:40:07 graph]: Epoch 68: get test f1 score:  0.783
+[08/15 14:40:07 graph]: best_f1 0.783 at epoch 2
+[08/15 14:40:08 graph]: Epoch 69 | train_loss: 0.4334 | lr: 0.000292
+[08/15 14:40:12 graph]: #Test_f1: 0.7792±0.0263
+[08/15 14:40:12 graph]: Epoch 69: get test f1 score:  0.779
+[08/15 14:40:12 graph]: best_f1 0.783 at epoch 2
+[08/15 14:40:14 graph]: Epoch 70 | train_loss: 0.4333 | lr: 0.000292
+[08/15 14:40:18 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:40:18 graph]: Epoch 70: get test f1 score:  0.783
+[08/15 14:40:18 graph]: best_f1 0.783 at epoch 2
+[08/15 14:40:20 graph]: Epoch 71 | train_loss: 0.4341 | lr: 0.000292
+[08/15 14:40:24 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:40:24 graph]: Epoch 71: get test f1 score:  0.783
+[08/15 14:40:24 graph]: best_f1 0.783 at epoch 2
+[08/15 14:40:26 graph]: Epoch 72 | train_loss: 0.4321 | lr: 0.000292
+[08/15 14:40:30 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:40:30 graph]: Epoch 72: get test f1 score:  0.783
+[08/15 14:40:30 graph]: best_f1 0.783 at epoch 2
+[08/15 14:40:32 graph]: Epoch 73 | train_loss: 0.4341 | lr: 0.000292
+[08/15 14:40:36 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:40:36 graph]: Epoch 73: get test f1 score:  0.783
+[08/15 14:40:36 graph]: best_f1 0.783 at epoch 2
+[08/15 14:40:37 graph]: Epoch 74 | train_loss: 0.4329 | lr: 0.000292
+[08/15 14:40:41 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:40:41 graph]: Epoch 74: get test f1 score:  0.783
+[08/15 14:40:41 graph]: best_f1 0.783 at epoch 2
+[08/15 14:40:43 graph]: Epoch 75 | train_loss: 0.4321 | lr: 0.000292
+[08/15 14:40:47 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:40:47 graph]: Epoch 75: get test f1 score:  0.783
+[08/15 14:40:47 graph]: best_f1 0.783 at epoch 2
+[08/15 14:40:49 graph]: Epoch 76 | train_loss: 0.4318 | lr: 0.000292
+[08/15 14:40:53 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:40:53 graph]: Epoch 76: get test f1 score:  0.783
+[08/15 14:40:53 graph]: best_f1 0.783 at epoch 2
+[08/15 14:40:55 graph]: Epoch 77 | train_loss: 0.4317 | lr: 0.000292
+[08/15 14:40:59 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:40:59 graph]: Epoch 77: get test f1 score:  0.783
+[08/15 14:40:59 graph]: best_f1 0.783 at epoch 2
+[08/15 14:41:01 graph]: Epoch 78 | train_loss: 0.4300 | lr: 0.000292
+[08/15 14:41:05 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:41:05 graph]: Epoch 78: get test f1 score:  0.783
+[08/15 14:41:05 graph]: best_f1 0.783 at epoch 2
+[08/15 14:41:06 graph]: Epoch 79 | train_loss: 0.4326 | lr: 0.000292
+[08/15 14:41:11 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:41:11 graph]: Epoch 79: get test f1 score:  0.783
+[08/15 14:41:11 graph]: best_f1 0.783 at epoch 2
+[08/15 14:41:12 graph]: Epoch 80 | train_loss: 0.4319 | lr: 0.000292
+[08/15 14:41:16 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:41:16 graph]: Epoch 80: get test f1 score:  0.783
+[08/15 14:41:16 graph]: best_f1 0.783 at epoch 2
+[08/15 14:41:18 graph]: Epoch 81 | train_loss: 0.4291 | lr: 0.000292
+[08/15 14:41:22 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:41:22 graph]: Epoch 81: get test f1 score:  0.783
+[08/15 14:41:22 graph]: best_f1 0.783 at epoch 2
+[08/15 14:41:24 graph]: Epoch 82 | train_loss: 0.4312 | lr: 0.000292
+[08/15 14:41:28 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:41:28 graph]: Epoch 82: get test f1 score:  0.783
+[08/15 14:41:28 graph]: best_f1 0.783 at epoch 2
+[08/15 14:41:30 graph]: Epoch 83 | train_loss: 0.4306 | lr: 0.000292
+[08/15 14:41:34 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:41:34 graph]: Epoch 83: get test f1 score:  0.783
+[08/15 14:41:34 graph]: best_f1 0.783 at epoch 2
+[08/15 14:41:36 graph]: Epoch 84 | train_loss: 0.4296 | lr: 0.000292
+[08/15 14:41:40 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:41:40 graph]: Epoch 84: get test f1 score:  0.783
+[08/15 14:41:40 graph]: best_f1 0.783 at epoch 2
+[08/15 14:41:41 graph]: Epoch 85 | train_loss: 0.4283 | lr: 0.000292
+[08/15 14:41:45 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:41:45 graph]: Epoch 85: get test f1 score:  0.783
+[08/15 14:41:45 graph]: best_f1 0.783 at epoch 2
+[08/15 14:41:47 graph]: Epoch 86 | train_loss: 0.4278 | lr: 0.000292
+[08/15 14:41:51 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:41:51 graph]: Epoch 86: get test f1 score:  0.783
+[08/15 14:41:51 graph]: best_f1 0.783 at epoch 2
+[08/15 14:41:53 graph]: Epoch 87 | train_loss: 0.4287 | lr: 0.000292
+[08/15 14:41:57 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:41:57 graph]: Epoch 87: get test f1 score:  0.783
+[08/15 14:41:57 graph]: best_f1 0.783 at epoch 2
+[08/15 14:41:59 graph]: Epoch 88 | train_loss: 0.4291 | lr: 0.000292
+[08/15 14:42:03 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:42:03 graph]: Epoch 88: get test f1 score:  0.783
+[08/15 14:42:03 graph]: best_f1 0.783 at epoch 2
+[08/15 14:42:05 graph]: Epoch 89 | train_loss: 0.4283 | lr: 0.000292
+[08/15 14:42:09 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:42:09 graph]: Epoch 89: get test f1 score:  0.783
+[08/15 14:42:09 graph]: best_f1 0.783 at epoch 2
+[08/15 14:42:11 graph]: Epoch 90 | train_loss: 0.4284 | lr: 0.000292
+[08/15 14:42:15 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:42:15 graph]: Epoch 90: get test f1 score:  0.783
+[08/15 14:42:15 graph]: best_f1 0.783 at epoch 2
+[08/15 14:42:17 graph]: Epoch 91 | train_loss: 0.4277 | lr: 0.000292
+[08/15 14:42:21 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:42:21 graph]: Epoch 91: get test f1 score:  0.783
+[08/15 14:42:21 graph]: best_f1 0.783 at epoch 2
+[08/15 14:42:23 graph]: Epoch 92 | train_loss: 0.4301 | lr: 0.000292
+[08/15 14:42:27 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:42:27 graph]: Epoch 92: get test f1 score:  0.783
+[08/15 14:42:27 graph]: best_f1 0.783 at epoch 2
+[08/15 14:42:28 graph]: Epoch 93 | train_loss: 0.4301 | lr: 0.000292
+[08/15 14:42:32 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:42:32 graph]: Epoch 93: get test f1 score:  0.783
+[08/15 14:42:32 graph]: best_f1 0.783 at epoch 2
+[08/15 14:42:34 graph]: Epoch 94 | train_loss: 0.4285 | lr: 0.000292
+[08/15 14:42:38 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:42:38 graph]: Epoch 94: get test f1 score:  0.783
+[08/15 14:42:38 graph]: best_f1 0.783 at epoch 2
+[08/15 14:42:40 graph]: Epoch 95 | train_loss: 0.4281 | lr: 0.000292
+[08/15 14:42:44 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:42:44 graph]: Epoch 95: get test f1 score:  0.783
+[08/15 14:42:44 graph]: best_f1 0.783 at epoch 2
+[08/15 14:42:46 graph]: Epoch 96 | train_loss: 0.4272 | lr: 0.000292
+[08/15 14:42:50 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:42:50 graph]: Epoch 96: get test f1 score:  0.783
+[08/15 14:42:50 graph]: best_f1 0.783 at epoch 2
+[08/15 14:42:52 graph]: Epoch 97 | train_loss: 0.4269 | lr: 0.000292
+[08/15 14:42:56 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:42:56 graph]: Epoch 97: get test f1 score:  0.783
+[08/15 14:42:56 graph]: best_f1 0.783 at epoch 2
+[08/15 14:42:57 graph]: Epoch 98 | train_loss: 0.4270 | lr: 0.000292
+[08/15 14:43:01 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:43:01 graph]: Epoch 98: get test f1 score:  0.783
+[08/15 14:43:01 graph]: best_f1 0.783 at epoch 2
+[08/15 14:43:03 graph]: Epoch 99 | train_loss: 0.4241 | lr: 0.000292
+[08/15 14:43:07 graph]: #Test_f1: 0.7832±0.0191
+[08/15 14:43:07 graph]: Epoch 99: get test f1 score:  0.783
+[08/15 14:43:07 graph]: best_f1 0.783 at epoch 2
+[08/15 14:43:08 graph]: # final_acc: 0.7832±0.0000
+*******************************
+/root/miniconda3/envs/myconda/bin/python /mnt/ddm0813/GraphExp/main_graph.py
+WARNING:root:The OGB package is out of date. Your version is 1.3.5, while the latest version is 1.3.6.
+True
+NVIDIA RTX A2000 12GB
+DGL version: 0.9.1post1
+{'DATA': {'data_name': 'MUTAG', 'deg4feat': True}, 'DATALOADER': {'NUM_WORKERS': 0, 'BATCH_SIZE': 16}, 'MODEL': {'num_hidden': 512, 'num_layers': 2, 'nhead': 4, 'activation': 'prelu', 'attn_drop': 0.1, 'feat_drop': 0.2, 'norm': 'layernorm', 'pooler': 'mean', 'beta_schedule': 'sigmoid', 'beta_1': 0.000335, 'beta_T': 0.03379, 'T': 728}, 'SOLVER': {'optim_type': 'adamw', 'optim_type_f': 'adamw', 'alpha': 1, 'decay': 30, 'LR': 0.000292, 'weight_decay': 0.0005, 'MAX_EPOCH': 100}, 'DEVICE': 'cuda', 'seeds': [11], 'eval_T': [50, 100, 300], 'output_dir': '/mnt/ddm0813/GraphExp/log', 'checkpoint_dir': '/mnt/ddm0813/GraphExp/log/checkpoint'}
+['AGNNConv', 'APPNPConv', 'AtomicConv', 'AvgPooling', 'CFConv', 'ChebConv', 'DGNConv', 'DenseChebConv', 'DenseGraphConv', 'DenseSAGEConv', 'DotGatConv', 'EGATConv', 'EGNNConv', 'EdgeConv', 'EdgePredictor', 'EdgeWeightNorm', 'GATConv', 'GATv2Conv', 'GCN2Conv', 'GINConv', 'GINEConv', 'GMMConv', 'GNNExplainer', 'GatedGraphConv', 'GlobalAttentionPooling', 'GraphConv', 'GroupRevRes', 'HGTConv', 'HeteroEmbedding', 'HeteroGraphConv', 'HeteroLinear', 'JumpingKnowledge', 'KNNGraph', 'LabelPropagation', 'MaxPooling', 'NNConv', 'NodeEmbedding', 'PNAConv', 'RadiusGraph', 'RelGraphConv', 'SAGEConv', 'SGConv', 'SegmentedKNNGraph', 'Sequential', 'Set2Set', 'SetTransformerDecoder', 'SetTransformerEncoder', 'SortPooling', 'SumPooling', 'TAGConv', 'TWIRLSConv', 'TWIRLSUnfoldingAndAttention', 'TransE', 'TransR', 'TypedLinear', 'WeightAndSum', 'WeightBasis', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', '__spec__', '_load_backend', 'backend_name', 'conv', 'edge_softmax', 'edgepred', 'expand_as_pair', 'explain', 'factory', 'functional', 'glob', 'hetero', 'importlib', 'knn_graph', 'linear', 'link', 'nn', 'os', 'pairwise_squared_distance', 'pytorch', 'radius_graph', 'segmented_knn_graph', 'softmax', 'sparse_emb', 'sys', 'transe', 'transr', 'utils']
+[09/11 09:19:31 graph]: Rank of current process: 0. World size: 1
+[09/11 09:19:33 graph]: Environment info:
+PyTorch version: 1.11.0+cu113
+Is debug build: False
+CUDA used to build PyTorch: 11.3
+ROCM used to build PyTorch: N/A
+
+OS: Ubuntu 18.04.6 LTS (x86_64)
+GCC version: (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+Clang version: Could not collect
+CMake version: version 3.10.2
+Libc version: glibc-2.27
+
+Python version: 3.8.12 (default, Oct 12 2021, 13:49:34)  [GCC 7.5.0] (64-bit runtime)
+Python platform: Linux-4.19.0-19-amd64-x86_64-with-glibc2.17
+Is CUDA available: True
+CUDA runtime version: Could not collect
+GPU models and configuration: GPU 0: NVIDIA RTX A2000 12GB
+Nvidia driver version: 470.94
+cuDNN version: Probably one of the following:
+/usr/lib/x86_64-linux-gnu/libcudnn.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_infer.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_train.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_infer.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_train.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_infer.so.8.2.0
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_train.so.8.2.0
+HIP runtime version: N/A
+MIOpen runtime version: N/A
+
+Versions of relevant libraries:
+[pip3] numpy==1.22.3
+[pip3] torch==1.11.0+cu113
+[pip3] torchaudio==0.11.0+cu113
+[pip3] torchvision==0.12.0+cu113
+[conda] Could not collect
+        Pillow (9.0.1)
+[09/11 09:19:33 graph]: Command line arguments: Namespace(checkpoint_dir=None, local_rank=0, output_dir=None, resume=False, seed=1234, start_epoch=0, yaml_dir=None)
+Patient 190: DTI matrix shape (84, 84) differs from target (90, 90), padding required.
+Processing node features for fMRI and DTI
+******** # Num Graphs: 250, # Num Classes: 2 ********
+Number of feature_dim_fmri→features: 90
+Number of feature_dim_dti→features: 90
+Number of classes: 2
+[09/11 09:19:34 graph]: Run 0th for seed 11
+[09/11 09:19:34 graph]: Total trainable params num : 8075798
+[09/11 09:19:40 graph]: ----------Start Training----------
+t_community1097742134: 67
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 678
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 38
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 125
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 352
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 448
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 422
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 704
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 66
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 364
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 476
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 47
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 194
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 306
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 320
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 501
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+[09/11 09:21:26 graph]: Epoch 0 | train_loss: 22.4471 | lr: 0.000292
+t_community1097742134: 256
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 630
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 222
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 185
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 321
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 216
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 214
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 173
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 323
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 59
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 403
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 403
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 696
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 2
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 617
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 276
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+[09/11 09:23:12 graph]: Epoch 1 | train_loss: 13.5734 | lr: 0.000292
+t_community1097742134: 633
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 311
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 461
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 52
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 159
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 713
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 231
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 524
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 592
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 617
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 223
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 268
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 194
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 459
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 283
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 493
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+[09/11 09:24:57 graph]: Epoch 2 | train_loss: 10.3933 | lr: 0.000292
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+embed_list shape: (250, 3072)
+y_list shape: (250,)
+reduced_embed_list shape: (250, 100)
+Maximum Accuracy: 0.6800
+Maximum Sensitivity: 0.6800
+Maximum Specificity: 0.7692
+Maximum AUC: 0.7244
+Maximum Recall: 0.6800
+Maximum F1 Score: 0.6800 ± 0.0680
+[09/11 09:29:51 graph]: #Test_f1: 0.6800±0.0680
+[09/11 09:29:51 graph]: Epoch 2: get test f1 score:  0.680
+[09/11 09:29:51 graph]: best_f1 0.680 at epoch 2
+t_community1097742134: 342
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 148
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 557
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 143
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 613
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 586
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 447
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 462
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 723
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 676
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 707
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 135
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 13
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 84
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 500
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 192
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+[09/11 09:31:52 graph]: Epoch 3 | train_loss: 9.1651 | lr: 0.000292
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+best_f1Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+best_f1Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+embed_list shape: (250, 3072)
+y_list shape: (250,)
+reduced_embed_list shape: (250, 100)
+Maximum Accuracy: 0.7200
+Maximum Sensitivity: 0.7200
+Maximum Specificity: 0.6667
+Maximum AUC: 0.8141
+Maximum Recall: 0.7200
+Maximum F1 Score: 0.7200 ± 0.0567
+[09/11 09:37:08 graph]: #Test_f1: 0.7200±0.0567
+[09/11 09:37:08 graph]: Epoch 3: get test f1 score:  0.720
+[09/11 09:37:08 graph]: best_f1 0.720 at epoch 3
+t_community1097742134: 76
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 181
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 330
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 523
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 20
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 470
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 678
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 706
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 224
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 44
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 519
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 662
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 145
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 167
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 265
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 308
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+[09/11 09:39:00 graph]: Epoch 4 | train_loss: 8.5223 | lr: 0.000292
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+embed_list shape: (250, 3072)
+y_list shape: (250,)
+reduced_embed_list shape: (250, 100)
+Maximum Accuracy: 0.7600
+Maximum Sensitivity: 0.7600
+Maximum Specificity: 0.8462
+Maximum AUC: 0.7628
+Maximum Recall: 0.7600
+Maximum F1 Score: 0.7600 ± 0.0512
+[09/11 09:44:23 graph]: #Test_f1: 0.7600±0.0512
+[09/11 09:44:23 graph]: Epoch 4: get test f1 score:  0.760
+[09/11 09:44:23 graph]: best_f1 0.760 at epoch 4
+t_community1097742134: 574
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 395
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 213
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 217
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 404
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 581
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 681
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 227
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 418
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 76
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 339
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 29
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 36
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 440
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 585
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 565
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+[09/11 09:46:13 graph]: Epoch 5 | train_loss: 8.0850 | lr: 0.000292
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+embed_list shape: (250, 3072)
+y_list shape: (250,)
+reduced_embed_list shape: (250, 100)
+Maximum Accuracy: 0.7200
+Maximum Sensitivity: 0.7200
+Maximum Specificity: 0.7500
+Maximum AUC: 0.7692
+Maximum Recall: 0.7200
+Maximum F1 Score: 0.7200 ± 0.0614
+[09/11 09:51:06 graph]: #Test_f1: 0.7200±0.0614
+[09/11 09:51:06 graph]: Epoch 5: get test f1 score:  0.720
+[09/11 09:51:06 graph]: best_f1 0.760 at epoch 4
+t_community1097742134: 621
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 668
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 706
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 398
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 615
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 216
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 465
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 657
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 599
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 469
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 27
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 126
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 151
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 474
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 422
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 272
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+[09/11 09:52:54 graph]: Epoch 6 | train_loss: 7.8239 | lr: 0.000292
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+embed_list shape: (250, 3072)
+y_list shape: (250,)
+reduced_embed_list shape: (250, 100)
+Maximum Accuracy: 0.7600
+Maximum Sensitivity: 0.7600
+Maximum Specificity: 1.0000
+Maximum AUC: 0.7628
+Maximum Recall: 0.7600
+Maximum F1 Score: 0.7600 ± 0.1095
+[09/11 09:57:49 graph]: #Test_f1: 0.7600±0.1095
+[09/11 09:57:49 graph]: Epoch 6: get test f1 score:  0.760
+[09/11 09:57:49 graph]: best_f1 0.760 at epoch 4
+t_community1097742134: 523
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 259
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 98
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 123
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 386
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 25
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 291
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 115
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 564
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 165
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 344
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 135
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 164
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 415
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 189
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 389
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+[09/11 09:59:36 graph]: Epoch 7 | train_loss: 7.6309 | lr: 0.000292
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+embed_list shape: (250, 3072)
+y_list shape: (250,)
+reduced_embed_list shape: (250, 100)
+Maximum Accuracy: 0.7200
+Maximum Sensitivity: 0.7200
+Maximum Specificity: 1.0000
+Maximum AUC: 0.7949
+Maximum Recall: 0.7200
+Maximum F1 Score: 0.7200 ± 0.0873
+[09/11 10:04:28 graph]: #Test_f1: 0.7200±0.0873
+[09/11 10:04:28 graph]: Epoch 7: get test f1 score:  0.720
+[09/11 10:04:28 graph]: best_f1 0.760 at epoch 4
+t_community1097742134: 694
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 466
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 440
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 516
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 350
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 501
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 271
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 185
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 312
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 609
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 343
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 3
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 563
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 2
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 13
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 407
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+[09/11 10:06:15 graph]: Epoch 8 | train_loss: 7.4583 | lr: 0.000292
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+embed_list shape: (250, 3072)
+y_list shape: (250,)
+reduced_embed_list shape: (250, 100)
+Maximum Accuracy: 0.9200
+Maximum Sensitivity: 0.9200
+Maximum Specificity: 0.8333
+Maximum AUC: 0.9295
+Maximum Recall: 0.9200
+Maximum F1 Score: 0.9200 ± 0.1159
+[09/11 10:11:06 graph]: #Test_f1: 0.9200±0.1159
+[09/11 10:11:06 graph]: Epoch 8: get test f1 score:  0.920
+[09/11 10:11:06 graph]: best_f1 0.920 at epoch 8
+t_community1097742134: 170
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 714
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 65
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 128
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 250
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 205
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 411
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 278
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 324
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 82
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 395
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 52
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 553
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 709
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 672
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 623
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+[09/11 10:12:56 graph]: Epoch 9 | train_loss: 7.3194 | lr: 0.000292
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+embed_list shape: (250, 3072)
+y_list shape: (250,)
+reduced_embed_list shape: (250, 100)
+Maximum Accuracy: 0.7200
+Maximum Sensitivity: 0.7200
+Maximum Specificity: 1.0000
+Maximum AUC: 0.7949
+Maximum Recall: 0.7200
+Maximum F1 Score: 0.7200 ± 0.0844
+[09/11 10:18:04 graph]: #Test_f1: 0.7200±0.0844
+[09/11 10:18:04 graph]: Epoch 9: get test f1 score:  0.720
+[09/11 10:18:04 graph]: best_f1 0.920 at epoch 8
+t_community1097742134: 120
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 29
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 51
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 601
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 202
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 653
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 44
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 342
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 507
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 378
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 51
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 87
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 486
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 650
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 623
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 290
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+[09/11 10:19:52 graph]: Epoch 10 | train_loss: 7.2077 | lr: 0.000292
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+embed_list shape: (250, 3072)
+y_list shape: (250,)
+reduced_embed_list shape: (250, 100)
+Maximum Accuracy: 0.7200
+Maximum Sensitivity: 0.7200
+Maximum Specificity: 1.0000
+Maximum AUC: 0.8013
+Maximum Recall: 0.7200
+Maximum F1 Score: 0.7200 ± 0.0605
+[09/11 10:24:44 graph]: #Test_f1: 0.7200±0.0605
+[09/11 10:24:44 graph]: Epoch 10: get test f1 score:  0.720
+[09/11 10:24:44 graph]: best_f1 0.920 at epoch 8
+t_community1097742134: 285
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 533
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 493
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 29
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 516
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 450
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 488
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 309
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 31
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 619
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 337
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 147
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 352
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 539
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 704
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 435
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+[09/11 10:26:31 graph]: Epoch 11 | train_loss: 7.0980 | lr: 0.000292
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2024999
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+Number of nodes in finally_batch_g_eval: 22500
+Number of edges in finally_batch_g_eval: 2025000
+embed_list shape: (250, 3072)
+y_list shape: (250,)
+reduced_embed_list shape: (250, 100)
+Maximum Accuracy: 0.7600
+Maximum Sensitivity: 0.7600
+Maximum Specificity: 0.7500
+Maximum AUC: 0.8333
+Maximum Recall: 0.7600
+Maximum F1 Score: 0.7600 ± 0.0866
+[09/11 10:31:20 graph]: #Test_f1: 0.7600±0.0866
+[09/11 10:31:20 graph]: Epoch 11: get test f1 score:  0.760
+[09/11 10:31:20 graph]: best_f1 0.920 at epoch 8
+t_community1097742134: 211
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 312
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 16
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 207
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 501
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 410
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 698
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 567
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 287
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 590
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 202
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 13
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 297
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 144
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 90
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+t_community1097742134: 457
+x_fmri: torch.Size([1440, 90])
+x_dti: torch.Size([1440, 90])
+community_fmri: torch.Size([1440, 1])
+community_dti: torch.Size([1440, 1])
+i12356: 0
+i12356: 1
+i12356: 2
+i12356: 3
+i12356: 4
+i12356: 5
+i12356: 6
+i12356: 7
+i12356: 8
+i12356: 9
+i12356: 10
+i12356: 11
+i12356: 12
+i12356: 13
+i12356: 14
+i12356: 15
+[09/11 10:33:06 graph]: Epoch 12 | train_loss: 6.9818 | lr: 0.000292
+x_fmri: torch.Size([22500, 90])
+x_dti: torch.Size([22500, 90])
+
+Process finished with exit code -1
