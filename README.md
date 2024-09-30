@@ -1,2 +1,2 @@
-# SDiff
-Scalable diffusion model (SDiff) for bio-topological brain graph representation learning
+# Scalable diffusion model (SDiff)
+SDiff is designed for bio-topological brain graph representation learning
