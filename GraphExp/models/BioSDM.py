@@ -34,8 +34,8 @@ def extract(v, t, x_shape):
 class SDiff(nn.Module):
     def __init__(
             self,
-            in_dim_fmri:int , # 假设fMRI的输入维度是128
-            in_dim_dti:int , # 假设DTI的输入维度是64
+            in_dim_fmri:int , 
+            in_dim_dti:int , 
             # in_dim: int,
             num_hidden: int,
             num_layers: int,
