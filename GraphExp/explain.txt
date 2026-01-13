@@ -1,0 +1,55 @@
+/root/miniconda3/envs/myconda/bin/python /mnt/SDiff/GraphExp/explain.py
+>>> 正在加载数据集...
+------------------------------
+开始加载数据集...
+  -> Loaded 'labels' from datasets/ADNI/adni_labels.mat
+  -> Loaded 'all_matrices' from datasets/ADNI/adni_fmri.mat
+  -> Loaded 'all_matrices_dti' from datasets/ADNI/adni_dti.mat
+  -> Loaded 'processed_matrices' from datasets/ADNI/adni_fmri_divide/fmri_processed_lambda1.0.mat
+  -> Loaded 'processed_matrices' from datasets/ADNI/adni_dti_divide/dti_processed_lambda2.0.mat
+  -> Loaded 'community_partitions' from datasets/ADNI/adni_fmri_divide/fmri_partition_lambda1.0.mat
+  -> Loaded 'community_partitions' from datasets/ADNI/adni_dti_divide/dti_partition_lambda2.0.mat
+检测到 460 个样本，开始构建图...
+    [Warning] Padding matrix from (89, 89) to (90, 90)
+    [Warning] Padding matrix from (84, 84) to (90, 90)
+    [Warning] Padding matrix from (84, 84) to (90, 90)
+数据集加载完毕: 460 个样本, 3 类.
+>>> 正在加载模型: log/checkpoint/fold_1/model_best.pth.tar
+/mnt/SDiff/GraphExp/explain.py:81: FutureWarning:
+
+You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+
+>>> 开始计算全脑节点重要性 (K=10步采样)...
+    处理进度: 0/460
+    处理进度: 100/460
+    处理进度: 200/460
+    处理进度: 300/460
+    处理进度: 400/460
+
+>>> 数据诊断:
+   Class 0: Mean range [8.024818e-01, 1.158469e+00]
+   Class 1: Mean range [7.896455e-01, 1.151670e+00]
+   Class 2: Mean range [7.997010e-01, 1.150525e+00]
+   Global Range: [7.896455e-01, 1.158469e+00]
+
+>>> 图表已保存: biomarker_analysis_lines.png
+
+=====================================================================================
+🏆 Top 10 Discriminative Brain Regions
+   (Difference between NC and AD)
+=====================================================================================
+Rank  Region Name                    Diff (Sci)   Raw NC     Raw AD     Trend
+-------------------------------------------------------------------------------------
+1     Cuneus_R                       1.27e-01     1.00e+00   9.53e-01   NC > AD
+2     Insula_R                       1.19e-01     1.01e+00   1.06e+00   AD > NC
+3     Hippocampus_L                  1.19e-01     1.07e+00   1.02e+00   NC > AD
+4     Frontal_Inf_Orb_R              1.03e-01     9.71e-01   9.33e-01   NC > AD
+5     Frontal_Mid_R                  1.01e-01     9.26e-01   9.63e-01   AD > NC
+6     Temporal_Pole_Mid_R            9.86e-02     9.77e-01   9.41e-01   NC > AD
+7     Precuneus_L                    9.19e-02     1.08e+00   1.11e+00   AD > NC
+8     Frontal_Inf_Orb_L              8.99e-02     9.99e-01   9.66e-01   NC > AD
+9     Fusiform_R                     8.80e-02     1.05e+00   1.09e+00   AD > NC
+10    Postcentral_L                  8.18e-02     1.11e+00   1.14e+00   AD > NC
+=====================================================================================
+
+Process finished with exit code 0

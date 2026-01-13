@@ -5,6 +5,11 @@ from sklearn.preprocessing import MinMaxScaler
 import torch
 import torch.nn.functional as F
 
+import scipy.io as sio
+import dgl
+import torch
+import numpy as np
+
 import dgl
 from dgl.data import (
     load_data, 
@@ -282,124 +287,141 @@ def load_graph_classification_dataset(fmri_filepath, labels_filepath, deg4feat=F
 
     return dataset, (feature_dim, num_classes)
 
-# 定义填充函数
-def pad_to_shape(matrix, target_shape):
+
+def get_mat_data(filepath):
+    """辅助函数：自动获取 .mat 文件中最大的那个变量"""
+    data = sio.loadmat(filepath)
+    keys = [k for k in data.keys() if not k.startswith('__')]
+    target_key = max(keys, key=lambda k: data[k].size)
+    print(f"  -> Loaded '{target_key}' from {filepath}")
+    return data[target_key]
+
+
+def pad_to_90x90(matrix):
     """
-    将矩阵填充到指定形状，使用 0 进行填充。
-    :param matrix: 需要填充的矩阵
-    :param target_shape: 目标形状，例如 (90, 90)
-    :return: 填充后的矩阵
+    辅助函数：将任意尺寸小于90x90的矩阵填充到90x90
     """
-    pad_rows = target_shape[0] - matrix.shape[0]
-    pad_cols = target_shape[1] - matrix.shape[1]
-    padded_matrix = np.pad(matrix, ((0, pad_rows), (0, pad_cols)), mode='constant')
-    return padded_matrix
-# 加载社区划分数据
-# 主要函数
-def load_multimodal_graph_classification_dataset(fmri_filepath, dti_filepath, labels_filepath, deg4feat=False):
+    target_shape = (90, 90)
+    if matrix.shape == target_shape:
+        return matrix
+
+    # 创建全零底板
+    padded = np.zeros(target_shape, dtype=matrix.dtype)
+
+    # 计算有效区域
+    r = min(matrix.shape[0], 90)
+    c = min(matrix.shape[1], 90)
+
+    # 复制数据到左上角
+    padded[:r, :c] = matrix[:r, :c]
+
+    print(f"    [Warning] Padding matrix from {matrix.shape} to {target_shape}")
+    return padded
+
+
+def load_multimodal_graph_classification_dataset(
+        raw_fmri_path,
+        raw_dti_path,
+        struct_fmri_path,
+        struct_dti_path,
+        part_fmri_path,
+        part_dti_path,
+        labels_filepath,
+        deg4feat=False
+):
     graphs_fmri = []
     graphs_dti = []
     labels = []
 
-    # 读取标签数据
-    label_data = sio.loadmat(labels_filepath)
-    label_list = label_data['labels'].flatten()
+    print("-" * 30)
+    print("开始加载数据集...")
 
-    # 读取 fMRI 图数据
-    fmri_data = sio.loadmat(fmri_filepath)
-    fmri_matrices = fmri_data['fcn_corr']  # 假设是 250x1 的单元格数组
-    # 读取 DTI 图数据
-    dti_data = sio.loadmat(dti_filepath)
-    dti_matrices = dti_data['scn_corr']  # 假设也是 250x1 的单元格数组
+    # --- 1. 加载标签 ---
+    label_raw = get_mat_data(labels_filepath)
+    label_list = label_raw.flatten()
+    num_samples = len(label_list)
 
-    # 目标填充维度
-    target_dim = (90, 90)
-# 社区边矩阵   processed_matrices
-    fmri_community = './datasets/ppmi/fcn_corrHcPd/processed_first_partition.mat'
-    dti_community = './datasets/ppmi/scn_corrHcPd/processed_first_partition.mat'
-    # 社区划分
-    # 读取 fMRI 和 DTI 的社区划分信息
-    fmri_partition_filepath = './datasets/ppmi/fcn_corrHcPd/Fcn_community_first_partition.mat'
-    dti_partition_filepath = './datasets/ppmi/scn_corrHcPd/Scn_community_first_partition.mat'
-    fmri_partitions = sio.loadmat(fmri_partition_filepath)['community_partitions']
-    dti_partitions = sio.loadmat(dti_partition_filepath)['community_partitions']
-    # 读取 fMRI 图数据
-    fmri_data_community = sio.loadmat(fmri_community)
-    fmri_matrices_community = fmri_data_community['processed_matrices']  # 假设是 460x1 的单元格数组
-    dti_data_community = sio.loadmat(dti_community)
-    dti_matrices_community = dti_data_community['processed_matrices']  # 假设也是 460x1 的单元格数组
-    for i in range(len(dti_matrices)):
-        # 获取 fMRI  dti 的attr矩阵
-        fmri_matrix = fmri_matrices[i][0]
-        dti_matrix = dti_matrices[i][0]
-        # 获取 社区划分后的 边矩阵
-        fmri_matrix_community = fmri_matrices_community[i][0]
-        dti_matrix_community = dti_matrices_community[i][0]
-        # 获取 社区划分信息矩阵
-        fmri_matrix_partitions = fmri_partitions[i][0]
-        dti_matrix_partitions = dti_partitions[i][0]
-        if dti_matrix.shape != target_dim:
-            print(f"Patient {i}: DTI matrix shape {dti_matrix.shape} differs from target {target_dim}, padding required.")
-            dti_matrix = pad_to_shape(dti_matrix, target_dim)
-        # 创建 fMRI 图
-        g_fmri = dgl.graph(([], []), num_nodes=fmri_matrix.shape[0])
-        src, dst = np.nonzero(fmri_matrix_community)
-        print(f"Source indices: {src}, Destination indices: {dst}")
-        weights_fmri = fmri_matrix_community[src, dst]  # 获取边的权重
-        # 确保权重非空并添加边
-        if len(src) > 0 and len(dst) > 0:
-            weights_fmri = fmri_matrix_community[src, dst]
-            g_fmri.add_edges(src, dst, data={'weight': torch.tensor(weights_fmri, dtype=torch.float32)})
+    # --- 2. 加载原始矩阵 (Feature) ---
+    raw_fmri_all = get_mat_data(raw_fmri_path)
+    raw_dti_all = get_mat_data(raw_dti_path)
+
+    # --- 3. 加载 Mask 结构矩阵 (Structure) ---
+    struct_fmri_all = get_mat_data(struct_fmri_path)
+    struct_dti_all = get_mat_data(struct_dti_path)
+
+    # --- 4. 加载社区 Partition ---
+    part_fmri_all = get_mat_data(part_fmri_path)
+    part_dti_all = get_mat_data(part_dti_path)
+
+    print(f"检测到 {num_samples} 个样本，开始构建图...")
+
+    for i in range(num_samples):
+        # === A. 提取并修复单样本数据 ===
+
+        # 1. 特征 (Raw) - 这里可能存在尺寸问题
+        mat_f_attr = raw_fmri_all[i, 0] if raw_fmri_all.ndim > 1 else raw_fmri_all[i]
+        mat_d_attr = raw_dti_all[i, 0] if raw_dti_all.ndim > 1 else raw_dti_all[i]
+
+        # *** 关键修复：强制填充到 90x90 ***
+        mat_f_attr = pad_to_90x90(mat_f_attr)
+        mat_d_attr = pad_to_90x90(mat_d_attr)
+
+        # 2. 结构 (Masked) - 这些已经是处理好的 90x90
+        mat_f_struct = struct_fmri_all[i, 0]
+        mat_d_struct = struct_dti_all[i, 0]
+
+        # 3. 社区 ID
+        part_f = part_fmri_all[i, 0].flatten()
+        part_d = part_dti_all[i, 0].flatten()
+
+        # === B. 构建 fMRI 图 ===
+        g_fmri = dgl.graph(([], []), num_nodes=90)
+        src_f, dst_f = np.nonzero(mat_f_struct)
+        weights_f = mat_f_struct[src_f, dst_f]
+
+        # 添加边
+        g_fmri.add_edges(src_f, dst_f, data={'weight': torch.tensor(weights_f, dtype=torch.float32)})
+
+        # 添加特征 (现在肯定是 90x90 了)
+        g_fmri.ndata['attr'] = torch.tensor(mat_f_attr, dtype=torch.float32)
+        g_fmri.ndata['community'] = torch.tensor(part_f, dtype=torch.long)
+
+        # === C. 构建 DTI 图 ===
+        g_dti = dgl.graph(([], []), num_nodes=90)
+        src_d, dst_d = np.nonzero(mat_d_struct)
+        weights_d = mat_d_struct[src_d, dst_d]
+
+        # 添加边
+        if len(src_d) > 0:
+            g_dti.add_edges(src_d, dst_d, data={'weight': torch.tensor(weights_d, dtype=torch.float32)})
         else:
-            g_fmri.add_edges([], [], data={'weight': torch.zeros(0, dtype=torch.float32)})
+            print(f"Warning: Subject {i} DTI edges are empty. Adding self-loops.")
+            g_dti.add_edges(range(90), range(90), data={'weight': torch.ones(90)})
 
-        g_fmri.add_edges(src, dst, data={'weight': torch.tensor(weights_fmri, dtype=torch.float32)})
-        g_fmri.ndata['attr'] = torch.tensor(fmri_matrix, dtype=torch.float32)
-        g_fmri.ndata['community'] = torch.tensor(fmri_matrix_partitions, dtype=torch.long)  # 添加社区划分信息
+        # 添加特征
+        g_dti.ndata['attr'] = torch.tensor(mat_d_attr, dtype=torch.float32)
+        g_dti.ndata['community'] = torch.tensor(part_d, dtype=torch.long)
 
-        # 创建 DTI 图
-        g_dti = dgl.graph(([], []), num_nodes=dti_matrix.shape[0])
-        src, dst = np.nonzero(dti_matrix_community)
-        weights_dti = dti_matrix_community[src, dst]  # 获取边的权重
-        # 检查边权重是否为空
-        if weights_dti.size == 0:
-            print(f"Warning: No edges for DTI graph {i}.")
-            # 你可以选择添加自环或使用默认权重
-            g_dti.add_edges(src, dst)  # 仅添加边不带权重
-        else:
-            g_dti.add_edges(src, dst, data={'weight': torch.tensor(weights_dti, dtype=torch.float32)})
-
-        g_dti.add_edges(src, dst, data={'weight': torch.tensor(weights_dti, dtype=torch.float32)})
-        g_dti.ndata['attr'] = torch.tensor(dti_matrix, dtype=torch.float32)
-        g_dti.ndata['community'] = torch.tensor(dti_matrix_partitions, dtype=torch.long)  # 添加社区划分信息
-        # **调试信息：打印 fMRI 和 DTI 图的节点和边数量**
-        print(f"fMRI Graph {i}: {g_fmri.num_nodes()} nodes, {g_fmri.num_edges()} edges")
-        print(f"DTI Graph {i}: {g_dti.num_nodes()} nodes, {g_dti.num_edges()} edges")
-        # print(f"Graph {i}: edata_schemes={g_fmri.edata_schemes}")
-        # 保存图和标签
+        # 放入列表
         graphs_fmri.append(g_fmri)
         graphs_dti.append(g_dti)
         labels.append(label_list[i])
 
-    # 创建数据集
+    # 打包
     dataset = list(zip(graphs_fmri, graphs_dti, labels))
-    if not deg4feat:
-        print("Processing node features for fMRI and DTI")
-        # 获取特征维度
-        feature_dim_fmri = graphs_fmri[0].ndata['attr'].shape[1]
-        feature_dim_dti = graphs_dti[0].ndata['attr'].shape[1]
-    # 转换标签为 tensor
-    labels = torch.tensor(labels, dtype=torch.long)
 
-    # 获取类别数量
-    num_classes = torch.max(labels).item() + 1
+    # 获取特征维度
+    feat_dim_f = graphs_fmri[0].ndata['attr'].shape[1]
+    feat_dim_d = graphs_dti[0].ndata['attr'].shape[1]
 
-    # 对图进行自环处理
-    dataset = [(g_fmri.remove_self_loop().add_self_loop(),
-                g_dti.remove_self_loop().add_self_loop(),
-                label) for g_fmri, g_dti, label in dataset]
+    # 标签转 Tensor
+    labels_tensor = torch.tensor(labels, dtype=torch.long)
+    num_classes = torch.max(labels_tensor).item() + 1
 
-    print(f"******** # Num Graphs: {len(dataset)}, # Num Classes: {num_classes} ********")
+    # 加上自环
+    dataset = [(g_f.remove_self_loop().add_self_loop(),
+                g_d.remove_self_loop().add_self_loop(),
+                lbl) for g_f, g_d, lbl in dataset]
 
-    # 返回数据集以及 fMRI 和 DTI 特征维度，和类别数量
-    return dataset, (feature_dim_fmri, feature_dim_dti, num_classes)
+    print(f"数据集加载完毕: {len(dataset)} 个样本, {num_classes} 类.")
+    return dataset, (feat_dim_f, feat_dim_d, num_classes)

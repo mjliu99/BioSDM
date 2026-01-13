@@ -1,2 +1,2 @@
-from .SDiff import SDiff
+from .BrainSTORE import SDiff
 
